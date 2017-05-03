@@ -19,8 +19,8 @@ import static android.R.attr.y;
  */
 
 public class BattleField extends Field {
-    public static int y = 16;
-    public static int x = 9;
+    public static int y = 9;
+    public static int x = 16;
 
     public BattleField(Context context) {
         super(context, y, x);
@@ -37,14 +37,6 @@ public class BattleField extends Field {
         for (int i = 0; i < y; i++)
             for (int j = 0; j < x; j++) {
                 field[i][j].drawTile(canvas);
-                //drawTile(canvas, i, j);
             }
     }
-
-    private void drawTile(Canvas canvas, int x, int y) {
-        Bitmap tileImage = BitmapFactory.decodeResource(getResources(), R.drawable.tile_grass);
-        tileImage = Bitmap.createScaledBitmap(tileImage, 120, 120, false);
-        canvas.drawBitmap(tileImage, x, y, null);
-    }
-
 }
