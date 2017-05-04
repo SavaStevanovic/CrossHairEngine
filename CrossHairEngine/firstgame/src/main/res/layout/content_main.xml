@@ -17,22 +17,45 @@
     <RelativeLayout
         android:id="@+id/underlay"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="fill_parent"
+        android:gravity="center">
         <Button
-            android:id="@+id/ImageButton01"
+            android:id="@+id/ImageButtonUp"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_alignParentBottom="true"
+            android:background="@drawable/arrow_down"
+            android:clickable="true"
+            android:layout_toRightOf="@+id/ImageButtonLeft"
+            android:layout_toEndOf="@+id/ImageButtonLeft"
+           ></Button>
+        <Button
+            android:id="@+id/ImageButtonLeft"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/arrow_down"
+            android:clickable="true"
+            android:layout_below="@+id/ImageButtonUp" />
+        <Button
+            android:id="@+id/ImageButtonDown"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/arrow_down"
+            android:clickable="true"
+            android:layout_below="@+id/ImageButtonRight"
+            android:layout_toRightOf="@+id/ImageButtonLeft"
+            android:layout_toEndOf="@+id/ImageButtonLeft"></Button>
+
+        <Button
+            android:id="@+id/ImageButtonRight"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerVertical="true"
+            android:layout_alignBottom="@+id/ImageButtonLeft"
+            android:layout_toRightOf="@+id/ImageButtonDown"
             android:background="@drawable/arrow_down"
             android:clickable="true"></Button>
 
-        <Button
-            android:id="@+id/ImageButton02"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_above="@+id/ImageButton01"
-            android:background="@drawable/arrow_down"
-            android:clickable="true"></Button>
+
     </RelativeLayout>
 
 
