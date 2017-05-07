@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.content_main);
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.overlay);
         layout.addView(main, 0);
+        new FlyClient(FlyClient.Direction.CENTER,main).execute();
         DirectionButton(main,R.id.ImageButtonUp,FlyClient.Direction.UP);
         DirectionButton(main,R.id.ImageButtonDown,FlyClient.Direction.DOWN);
         DirectionButton(main,R.id.ImageButtonLeft,FlyClient.Direction.LEFT);

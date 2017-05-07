@@ -21,7 +21,7 @@ import java.net.Socket;
 
 public class FlyClient extends AsyncTask<Void, Void, JsonObject> {
     public static enum Direction {
-        UP("up"), DOWN("down"), LEFT("left"), RIGHT("right");
+        UP("up"), DOWN("down"), LEFT("left"), RIGHT("right"), CENTER("center");
 
         private final String name;
 
