@@ -23,24 +23,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.content_main);
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.overlay);
         layout.addView(main, 0);
-        DirectionButton(R.id.ImageButtonUp,FlyClient.Direction.UP);
+        DirectionButton(main,R.id.ImageButtonUp,FlyClient.Direction.UP);
+        DirectionButton(main,R.id.ImageButtonDown,FlyClient.Direction.DOWN);
+        DirectionButton(main,R.id.ImageButtonLeft,FlyClient.Direction.LEFT);
+        DirectionButton(main,R.id.ImageButtonRight,FlyClient.Direction.RIGHT);
     }
 
-    private void DirectionButton(int btnId, final FlyClient.Direction direction) {
+    private void DirectionButton(final BattleField field, int btnId, final FlyClient.Direction direction) {
         Button buttonUp = (Button) findViewById(btnId);
         buttonUp.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                new FlyClient(direction).execute();
+                new FlyClient(direction,field).execute();
+                field.invalidate();
             }
         });
     }
-
-   /* private void buttoning() {
-        Button buttonOne = (Button) findViewById(R.id.ImageButtonUp);
-        buttonOne.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-                 new FlyClient().execute();
-            }
-        });
-    }*/
 }

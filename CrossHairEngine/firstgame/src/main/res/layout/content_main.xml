@@ -23,7 +23,7 @@
             android:id="@+id/ImageButtonUp"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:background="@drawable/arrow_down"
+            android:background="@drawable/direction_up"
             android:clickable="true"
             android:layout_toRightOf="@+id/ImageButtonLeft"
             android:layout_toEndOf="@+id/ImageButtonLeft"
@@ -32,14 +32,14 @@
             android:id="@+id/ImageButtonLeft"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:background="@drawable/arrow_down"
+            android:background="@drawable/direction_left"
             android:clickable="true"
             android:layout_below="@+id/ImageButtonUp" />
         <Button
             android:id="@+id/ImageButtonDown"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:background="@drawable/arrow_down"
+            android:background="@drawable/direction_down"
             android:clickable="true"
             android:layout_below="@+id/ImageButtonRight"
             android:layout_toRightOf="@+id/ImageButtonLeft"
@@ -52,7 +52,7 @@
             android:layout_centerVertical="true"
             android:layout_alignBottom="@+id/ImageButtonLeft"
             android:layout_toRightOf="@+id/ImageButtonDown"
-            android:background="@drawable/arrow_down"
+            android:background="@drawable/direction_right"
             android:clickable="true"></Button>
 
 

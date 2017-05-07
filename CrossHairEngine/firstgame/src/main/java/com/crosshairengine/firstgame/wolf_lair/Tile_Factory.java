@@ -8,9 +8,11 @@ import com.crosshairengine.firstgame.R;
 import com.crosshairengine.firstgame.engine.Abstract_classes.Tile;
 import com.crosshairengine.firstgame.wolf_lair.Settings.PhoneSettings;
 import com.crosshairengine.firstgame.wolf_lair.Tiles.Tile_grass;
+import com.crosshairengine.firstgame.wolf_lair.Tiles.Tile_stone;
 
 import java.util.HashMap;
 
+import static android.R.attr.id;
 import static android.R.attr.type;
 import static android.graphics.BitmapFactory.decodeResource;
 
@@ -26,7 +28,8 @@ public class Tile_Factory {
     int weight_count;
 
     public static enum Tile_type {
-        GRASS(R.drawable.tile_grass);
+        GRASS(R.drawable.tile_grass ),
+        STONE(R.drawable.tile_stone );
 
         private int value;
 
@@ -47,7 +50,7 @@ public class Tile_Factory {
         weight = PhoneSettings.getInstance().getWeight();
         for (Tile_type tile_type: Tile_type.values()) {
             Bitmap bmp_grass = BitmapFactory.decodeResource(context.getResources(), tile_type.getValue());
-            bmp_grass=Bitmap.createScaledBitmap(bmp_grass, height / height_count-1, weight / weight_count-1, false);
+            bmp_grass=Bitmap.createScaledBitmap(bmp_grass,  weight / weight_count-1, height / height_count - 1, false);
             bitmap_originals.put(tile_type.getValue(), bmp_grass);
         }
 
@@ -59,7 +62,8 @@ public class Tile_Factory {
         int posY = y * weight / weight_count;
         Tile tile=null;
         switch (key) {
-            case GRASS: tile= new Tile_grass(bmp, posX, posY);
+            case GRASS: tile= new Tile_grass(bmp, posX, posY);break;
+            case STONE: tile= new Tile_stone(bmp, posX, posY);break;
         }
         return tile;
     }

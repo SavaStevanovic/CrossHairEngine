@@ -1,98 +1,90 @@
 package com.crosshairengine.firstgame.engine;
 
 
-import android.app.Service;
-import android.content.Intent;
+import android.graphics.Canvas;
 import android.os.AsyncTask;
-import android.os.IBinder;
-import android.support.annotation.Nullable;
 
 import com.crosshairengine.firstgame.engine.Abstract_classes.Field;
-import com.crosshairengine.firstgame.wolf_lair.Settings.PhoneSettings;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-
-import static android.R.attr.direction;
-import static android.R.attr.handle;
-import static android.R.transition.move;
 
 /**
  * Created by Sava on 5/3/2017.
  */
 
-public class FlyClient extends AsyncTask<Void, Void, JSONObject> {
-    public static enum Direction {UP, DOWN, LEFT, RIGHT}
+public class FlyClient extends AsyncTask<Void, Void, JsonObject> {
+    public static enum Direction {
+        UP("up"), DOWN("down"), LEFT("left"), RIGHT("right");
 
-    String hostName = "192.168.0.101";
+        private final String name;
+
+        private Direction(String s) {
+            name = s;
+        }
+
+        public String toString() {
+            return this.name;
+        }
+    }
+
+    String hostName = "192.168.0.103";
     int portNumber = 4321;
     Socket socket;
     DataOutputStream out;
     private DataInputStream in;
     Direction direction;
     Field field;
+    JsonParser jsonParser;
 
-    public FlyClient(Direction direction) {
+    public FlyClient(Direction direction, Field field) {
+        this.field = field;
         this.direction = direction;
+        jsonParser = new JsonParser();
     }
 
-        @Override
-        protected JSONObject doInBackground (Void...params){
-            try {
-                socket = new Socket();
-                socket.connect(new InetSocketAddress(hostName, portNumber), 5000);
-                out = new DataOutputStream(socket.getOutputStream());
-                in = new DataInputStream(socket.getInputStream());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            JSONObject json = new JSONObject();
-            try {
-                json.put("action", "move");
-                json.put("direction", direction);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                out.writeUTF("SavaClient");
-                JSONObject js = new JSONObject();
-                String s = in.readUTF();
-                js.put("response", s);
-                return js;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return new JSONObject();
+    @Override
+    protected JsonObject doInBackground(Void... params) {
+        try {
+            socket = new Socket();
+            socket.connect(new InetSocketAddress(hostName, portNumber), 5000);
+            out = new DataOutputStream(socket.getOutputStream());
+            in = new DataInputStream(socket.getInputStream());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        JsonObject json = new JsonObject();
 
-        @Override
-        protected void onPostExecute (JSONObject json){
-            try {
-                if (json.get("action") == "move") {
-                    handleMove(json.get("direction"), json.getJSONArray("params"));
-                }
+        json.addProperty("action", "move");
+        json.addProperty("direction", direction.toString());
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        String weaverResponse = null;
+        try {
+            out.writeUTF(json.toString());
+            weaverResponse = in.readUTF();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        JsonElement ret = jsonParser.parse(weaverResponse);
+        return ret.getAsJsonObject();
+    }
 
-    private void handleMove(Object direction, JSONArray params) {
-        Direction dir = (Direction) direction;
-        switch (dir) {
-            case UP:
-                break;
+    @Override
+    protected void onPostExecute(JsonObject result) {
+        String[] stringArray = result.get("Tiles").getAsString().split(",");
+        for (int i = 0; i < stringArray.length; i++) {
+            field.setElem(i / field.getYVal(), i % field.getYVal(), Integer.parseInt(stringArray[i]));
         }
+        field.invalidate();
     }
 }
+
+/*
+
+*/

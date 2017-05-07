@@ -1,0 +1,56 @@
+import java.awt.List;
+import java.lang.reflect.Array;
+import java.net.InetAddress;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import net.sf.json.JSONArray;
+
+public class GameHandler {
+	Field field;
+	public GameHandler() {
+		super();
+		this.field = new Field();
+	}
+	
+	public void jsonHandle(InetAddress playerAdress, JsonObject json) {
+		switch (json.get("action").getAsString()) {
+		case "move":
+			moveHandle(playerAdress, json);
+			break;
+		}
+	}
+
+	private void moveHandle(InetAddress playerAdress, JsonObject json) {
+		switch (json.get("direction").getAsString()) {
+		case "up":
+			field.Move(playerAdress, 1, 0);
+			break;
+		case "down":
+			field.Move(playerAdress, -1, 0);
+			break;
+		case "left":
+			field.Move(playerAdress, 0, -1);
+			break;
+		case "right":
+			field.Move(playerAdress, 0, 1);
+			break;
+		}
+	}
+	
+	public JsonObject PlayerInfo(InetAddress playerAdress){
+		Player player=field.getPlayer(playerAdress);
+		int initX=player.getX()-Constants.fieldViewHeight/2;
+		int initY=player.getY()-Constants.fieldViewWidth/2;
+		List retTiles=new List();
+		for (int i = initX; i < Constants.fieldHeight; i++) 
+			for (int j = initY; j < Constants.fieldWidth; j++) {
+				retTiles.add(Integer.toString(field.getTile(i, j)));
+					  }
+		
+		JSONArray array=new JSONArray();
+	}
+	}
+}

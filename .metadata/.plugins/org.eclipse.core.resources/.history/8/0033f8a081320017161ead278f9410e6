@@ -1,0 +1,10 @@
+package handlers;
+
+import com.google.gson.JsonObject;
+
+public class CommandHandler {
+	Field field;
+	public static  handleJsonCommand(JsonObject json){
+		
+	}
+}

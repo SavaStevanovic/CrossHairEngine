@@ -1,0 +1,6 @@
+import java.net.InetAddress;
+
+public class Player {
+int x,y;
+InetAddress address;
+}

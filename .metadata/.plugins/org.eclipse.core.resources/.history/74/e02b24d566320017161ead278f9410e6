@@ -1,0 +1,25 @@
+import java.net.InetAddress;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Vector;
+
+public class Field {
+	private int[][] field;
+	private HashMap<InetAddress,Player> players;
+
+	public Field() {
+		super();
+		this.field = new int[100][100];
+		this.players = new HashMap<InetAddress,Player>();
+	}
+
+	public Vector<Player> getPlayer(InetAddress address) {
+		if(players.containsKey(address)){
+			return players.get(address);
+		}
+	}
+
+	public void setPlayers(Vector<Player> players) {
+		this.players = players;
+	}
+}

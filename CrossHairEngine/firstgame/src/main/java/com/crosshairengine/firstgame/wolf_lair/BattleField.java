@@ -20,7 +20,7 @@ import static android.R.attr.y;
 
 public class BattleField extends Field {
     public static int y = 9;
-    public static int x = 16;
+    public static int x = 15;
 
     public BattleField(Context context) {
         super(context, y, x);
@@ -38,5 +38,11 @@ public class BattleField extends Field {
             for (int j = 0; j < x; j++) {
                 field[i][j].drawTile(canvas);
             }
+    }
+
+
+    @Override
+    public void setElem(int x, int y, int val) {
+        field[x][y]=tile_factory.getTile(Tile_Factory.Tile_type.values()[val],x,y);
     }
 }
