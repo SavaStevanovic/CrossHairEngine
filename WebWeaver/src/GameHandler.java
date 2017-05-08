@@ -47,14 +47,25 @@ public class GameHandler {
 		int initX = player.getX() - Constants.FieldParams.fieldViewHeight / 2;
 		int initY = player.getY() - Constants.FieldParams.fieldViewWidth / 2;
 		StringBuilder retTiles = new StringBuilder();
+		JsonArray retObjects = new JsonArray();
 		for (int i = initX; i < initX + Constants.FieldParams.fieldViewHeight; i++)
 			for (int j = initY; j < initY + Constants.FieldParams.fieldViewWidth; j++) {
-				retTiles.append(Long.toString(field.getTile(i, j))).append(",");
+				Tile tile=field.getTile(i, j);
+				retTiles.append(Long.toString(tile.getType())).append(",");
+				JsonObject jsonFieldObject=tile.getFieldObject();
+				if(jsonFieldObject!=null){
+					retObjects.add(jsonFieldObject);
+				}
 			}
+		for (Player otherPlayers : field.getGamePlayers()) {
+			
+		}
 		retTiles.deleteCharAt(retTiles.length() - 1);
 		JsonObject playerJson = new JsonObject();
+		playerJson.add("Player", player.getFieldObject());
 		playerJson.addProperty("Name", "Player");
 		playerJson.addProperty("Tiles", retTiles.toString());
+		playerJson.add("AllPlayers", retObjects);
 		return playerJson;
 	}
 }

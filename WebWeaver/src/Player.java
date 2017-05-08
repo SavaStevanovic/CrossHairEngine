@@ -1,6 +1,8 @@
 import java.net.InetAddress;
 
-public class Player {
+import com.google.gson.JsonObject;
+
+public class Player implements FieldObject {
 	private int x, y;
 
 	public Player(int x, int y) {
@@ -24,9 +26,18 @@ public class Player {
 	public void setY(int y) {
 		this.y = y;
 	}
-	
-	public void move(int xm,int ym){
-		this.x+=xm;
-		this.y+=ym;
+
+	public void move(int xm, int ym) {
+		this.x += xm;
+		this.y += ym;
+	}
+
+	@Override
+	public JsonObject getFieldObject() {
+		JsonObject json = new JsonObject();
+		json.addProperty("type", "player");
+		json.addProperty("x", x);
+		json.addProperty("y", y);
+		return json;
 	}
 }

@@ -1,3 +1,5 @@
+import java.awt.List;
+import java.lang.reflect.Array;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -8,18 +10,19 @@ import java.util.Vector;
 
 
 public class Field {
-	private int[][] field;
+	private Tile[][] field;
 	private Random rand = new Random();
 	private HashMap<InetAddress,Player> players;
 
 	public Field() {
 		super();
-		this.field = new int[Constants.FieldParams.fieldHeight][Constants.FieldParams.fieldWidth];
+		this.field = new Tile[Constants.FieldParams.fieldHeight][Constants.FieldParams.fieldWidth];
 		this.players = new HashMap<InetAddress,Player>();
 		
 		for (int i = 0; i < Constants.FieldParams.fieldHeight; i++) 
 			for (int j = 0; j < Constants.FieldParams.fieldWidth; j++) {
-				field[i][j]=Constants.TileType.grass+rand.nextInt(Constants.FieldParams.fieldTypes);
+				field[i][j]=new Tile(
+						Constants.TileType.grass+rand.nextInt(Constants.FieldParams.fieldTypes));
 			}
 		} 
 		
@@ -37,7 +40,11 @@ public class Field {
 		player.move(i, j);
 	}
 	
-	public long getTile(int x,int y){
+	public Tile getTile(int x,int y){
 		return field[x][y];
+	}
+	
+	public Vector<Player> getGamePlayers(){
+		return new Vector<Player>(players.values());
 	}
 }
