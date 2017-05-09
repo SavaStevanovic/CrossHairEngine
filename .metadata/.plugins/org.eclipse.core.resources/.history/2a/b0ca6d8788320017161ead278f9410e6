@@ -1,9 +1,0 @@
-
-public class Constants {
-	
-	public static int fieldWidth=100; 
-	public static int fieldHeight=100; 
-	public static int fieldTypes=2;
-	public static int fieldViewWidth=15;
-	public static int fieldViewHeight=9;
-}
