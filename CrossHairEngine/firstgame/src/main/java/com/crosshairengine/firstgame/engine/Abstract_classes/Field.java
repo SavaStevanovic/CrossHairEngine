@@ -19,9 +19,10 @@ import java.util.Vector;
 //
 public abstract class Field extends View {
     protected Tile[][] field;
+    protected Player userPlayer;
     protected Tile_Factory tile_factory;
     protected Player_Factory player_factory;
-    protected Vector<Player> players;
+    public Vector<Player> players;
     protected final int x, y;
 
     public Field(Context context, int x, int y) {
@@ -40,9 +41,11 @@ public abstract class Field extends View {
         return x;
     }
 
+    public abstract void setUserPlayer(int player_type, int x, int y);
+
+    public abstract void addPlayer(int player_type, int x, int y);
+
     public int getYVal() {
         return y;
     }
-
-    public abstract void addPlayerJson(JsonObject jsonPlayer);
 }

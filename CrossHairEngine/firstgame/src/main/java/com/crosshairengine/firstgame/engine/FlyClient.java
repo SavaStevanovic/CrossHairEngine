@@ -5,6 +5,8 @@ import android.graphics.Canvas;
 import android.os.AsyncTask;
 
 import com.crosshairengine.firstgame.engine.Abstract_classes.Field;
+import com.crosshairengine.firstgame.wolf_lair.Player_Factory;
+import com.crosshairengine.firstgame.wolf_lair.Players.Player_friendly;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -78,13 +80,19 @@ public class FlyClient extends AsyncTask<Void, Void, JsonObject> {
 
     @Override
     protected void onPostExecute(JsonObject result) {
+        int x, y;
         String[] stringArray = result.get("Tiles").getAsString().split(",");
         for (int i = 0; i < stringArray.length; i++) {
             field.setElem(i / field.getYVal(), i % field.getYVal(), Integer.parseInt(stringArray[i]));
         }
+        field.players.clear();
+        JsonObject jsonPlayer = result.getAsJsonObject("Player");
+        x = jsonPlayer.get("x").getAsInt();
+        y = jsonPlayer.get("y").getAsInt();
         JsonArray playerArray = result.get("AllPlayers").getAsJsonArray();
-        for (JsonElement playerJson:playerArray) {
-            field.addPlayerJson(playerJson.getAsJsonObject());
+        for (JsonElement playerJson : playerArray) {
+            JsonObject jsonEnemyPlayer = playerJson.getAsJsonObject();
+            field.addPlayer(1, jsonEnemyPlayer.get("x").getAsInt()-x, jsonEnemyPlayer.get("y").getAsInt()-y);
         }
         field.invalidate();
     }

@@ -55,7 +55,7 @@ public class Player_Factory {
 
     }
 
-    public Player getTile(Player_type key, int x, int y) {
+    public Player getPlayer(Player_type key, int x, int y) {
         Bitmap bmp = bitmap_originals.get(key.getValue());
         int posX = x * height / height_count;
         int posY = y * weight / weight_count;

@@ -12,6 +12,7 @@ import com.crosshairengine.firstgame.R;
 import com.crosshairengine.firstgame.engine.Abstract_classes.Field;
 import com.crosshairengine.firstgame.engine.Abstract_classes.Player;
 import com.crosshairengine.firstgame.engine.Abstract_classes.Tile;
+import com.crosshairengine.firstgame.wolf_lair.Players.Player_friendly;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -32,6 +33,7 @@ public class BattleField extends Field {
             for (int j = 0; j < x; j++) {
                 this.field[i][j] = this.tile_factory.getTile(Tile_Factory.Tile_type.GRASS, i, j);
             }
+        userPlayer = player_factory.getPlayer(Player_Factory.Player_type.FRIEND, this.getXVal() / 2, this.getYVal() / 2);
     }
 
 
@@ -42,19 +44,25 @@ public class BattleField extends Field {
             for (int j = 0; j < x; j++) {
                 field[i][j].drawTile(canvas);
             }
+        //userPlayer.drawPlayer(canvas);
+        for (Player player : players) {
+            player.drawPlayer(canvas);
+        }
     }
 
 
     @Override
     public void setElem(int x, int y, int val) {
-        field[x][y]=tile_factory.getTile(Tile_Factory.Tile_type.values()[val],x,y);
+        field[x][y] = tile_factory.getTile(Tile_Factory.Tile_type.values()[val], x, y);
     }
 
     @Override
-    public void addPlayerJson(JsonObject jsonPlayer) {
-        Gson gson = new GsonBuilder()
-                .registerTypeHierarchyAdapter(Player.class, new  BGsonAdapter())
-                .setPrettyPrinting()
-                .create();
+    public void setUserPlayer(int player_type, int x, int y) {
+        userPlayer = player_factory.getPlayer(Player_Factory.Player_type.values()[player_type], x, y);
+    }
+
+    @Override
+    public void addPlayer(int player_type, int x, int y) {
+        players.add(player_factory.getPlayer(Player_Factory.Player_type.values()[player_type], x+this.getXVal()/2, y+this.getYVal()/2));
     }
 }

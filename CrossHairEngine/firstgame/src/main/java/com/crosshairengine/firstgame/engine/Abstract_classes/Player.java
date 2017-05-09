@@ -35,7 +35,15 @@ public abstract class Player {
         return this;
     }
 
-    public void drawTile(Canvas canvas) {
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void drawPlayer(Canvas canvas) {
         canvas.drawBitmap(bitmap, y, x, null);
     }
 }
