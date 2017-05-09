@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.os.AsyncTask;
 
 import com.crosshairengine.firstgame.engine.Abstract_classes.Field;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -81,10 +82,10 @@ public class FlyClient extends AsyncTask<Void, Void, JsonObject> {
         for (int i = 0; i < stringArray.length; i++) {
             field.setElem(i / field.getYVal(), i % field.getYVal(), Integer.parseInt(stringArray[i]));
         }
+        JsonArray playerArray = result.get("AllPlayers").getAsJsonArray();
+        for (JsonElement playerJson:playerArray) {
+            field.addPlayerJson(playerJson.getAsJsonObject());
+        }
         field.invalidate();
     }
 }
-
-/*
-
-*/

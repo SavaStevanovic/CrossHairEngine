@@ -10,12 +10,16 @@ import android.view.View;
 
 import com.crosshairengine.firstgame.R;
 import com.crosshairengine.firstgame.engine.Abstract_classes.Field;
+import com.crosshairengine.firstgame.engine.Abstract_classes.Player;
 import com.crosshairengine.firstgame.engine.Abstract_classes.Tile;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 
 import static android.R.attr.y;
 
 /**
- * Created by Sava on 5/1/2017.
+ * Created by CrossHairEngine team on 5/1/2017.
  */
 
 public class BattleField extends Field {
@@ -44,5 +48,13 @@ public class BattleField extends Field {
     @Override
     public void setElem(int x, int y, int val) {
         field[x][y]=tile_factory.getTile(Tile_Factory.Tile_type.values()[val],x,y);
+    }
+
+    @Override
+    public void addPlayerJson(JsonObject jsonPlayer) {
+        Gson gson = new GsonBuilder()
+                .registerTypeHierarchyAdapter(Player.class, new  BGsonAdapter())
+                .setPrettyPrinting()
+                .create();
     }
 }

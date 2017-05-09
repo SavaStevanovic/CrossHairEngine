@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import com.crosshairengine.firstgame.engine.Abstract_classes.Tile;
 
 /**
- * Created by Sava on 5/7/2017.
+ * Created by CrossHairEngine team on 5/7/2017.
  */
 
 public class Tile_stone extends Tile {

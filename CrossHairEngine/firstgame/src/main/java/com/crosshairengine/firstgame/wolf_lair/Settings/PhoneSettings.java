@@ -8,7 +8,7 @@ import android.util.DisplayMetrics;
 import static java.security.AccessController.getContext;
 
 /**
- * Created by Sava on 5/2/2017.
+ * Created by CrossHairEngine team on 5/2/2017.
  */
 
 public class PhoneSettings {
