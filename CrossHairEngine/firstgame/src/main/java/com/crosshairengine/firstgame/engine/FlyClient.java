@@ -22,7 +22,7 @@ import java.net.Socket;
  * Created by Sava on 5/3/2017.
  */
 
-public class FlyClient extends AsyncTask<Void, Void, JsonObject> {
+public class FlyClient extends AsyncTask<Void, Void, Void> {
     public static enum Direction {
         UP("up"), DOWN("down"), LEFT("left"), RIGHT("right"), CENTER("center");
 
@@ -43,22 +43,18 @@ public class FlyClient extends AsyncTask<Void, Void, JsonObject> {
     DataOutputStream out;
     private DataInputStream in;
     Direction direction;
-    Field field;
     JsonParser jsonParser;
 
-    public FlyClient(Direction direction, Field field) {
-        this.field = field;
+    public FlyClient(Direction direction) {
         this.direction = direction;
-        jsonParser = new JsonParser();
     }
 
     @Override
-    protected JsonObject doInBackground(Void... params) {
+    protected Void doInBackground(Void... params) {
         try {
             socket = new Socket();
             socket.connect(new InetSocketAddress(hostName, portNumber), 5000);
             out = new DataOutputStream(socket.getOutputStream());
-            in = new DataInputStream(socket.getInputStream());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -70,30 +66,10 @@ public class FlyClient extends AsyncTask<Void, Void, JsonObject> {
         String weaverResponse = null;
         try {
             out.writeUTF(json.toString());
-            weaverResponse = in.readUTF();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-        JsonElement ret = jsonParser.parse(weaverResponse);
-        return ret.getAsJsonObject();
-    }
-
-    @Override
-    protected void onPostExecute(JsonObject result) {
-        int x, y;
-        String[] stringArray = result.get("Tiles").getAsString().split(",");
-        for (int i = 0; i < stringArray.length; i++) {
-            field.setElem(i / field.getYVal(), i % field.getYVal(), Integer.parseInt(stringArray[i]));
-        }
-        field.players.clear();
-        JsonObject jsonPlayer = result.getAsJsonObject("Player");
-        x = jsonPlayer.get("x").getAsInt();
-        y = jsonPlayer.get("y").getAsInt();
-        JsonArray playerArray = result.get("AllPlayers").getAsJsonArray();
-        for (JsonElement playerJson : playerArray) {
-            JsonObject jsonEnemyPlayer = playerJson.getAsJsonObject();
-            field.addPlayer(1, jsonEnemyPlayer.get("x").getAsInt()-x, jsonEnemyPlayer.get("y").getAsInt()-y);
-        }
-        field.invalidate();
+        return null;
     }
 }

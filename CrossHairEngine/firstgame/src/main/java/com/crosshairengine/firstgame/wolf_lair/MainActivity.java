@@ -10,6 +10,9 @@ import android.widget.RelativeLayout;
 
 import com.crosshairengine.firstgame.R;
 import com.crosshairengine.firstgame.engine.FlyClient;
+import com.crosshairengine.firstgame.engine.FlyClientRecever;
+
+import static android.R.attr.direction;
 
 public class MainActivity extends AppCompatActivity {
     BattleField main;
@@ -23,19 +26,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.content_main);
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.overlay);
         layout.addView(main, 0);
-        new FlyClient(FlyClient.Direction.CENTER,main).execute();
-        DirectionButton(main,R.id.ImageButtonUp,FlyClient.Direction.UP);
-        DirectionButton(main,R.id.ImageButtonDown,FlyClient.Direction.DOWN);
-        DirectionButton(main,R.id.ImageButtonLeft,FlyClient.Direction.LEFT);
-        DirectionButton(main,R.id.ImageButtonRight,FlyClient.Direction.RIGHT);
+        new FlyClientRecever(main).execute();
+        new FlyClient(FlyClient.Direction.CENTER).execute();
+        DirectionButton(R.id.ImageButtonUp,FlyClient.Direction.UP);
+        DirectionButton(R.id.ImageButtonDown,FlyClient.Direction.DOWN);
+        DirectionButton(R.id.ImageButtonLeft,FlyClient.Direction.LEFT);
+        DirectionButton(R.id.ImageButtonRight,FlyClient.Direction.RIGHT);
     }
 
-    private void DirectionButton(final BattleField field, int btnId, final FlyClient.Direction direction) {
+    private void DirectionButton( int btnId, final FlyClient.Direction direction) {
         Button buttonUp = (Button) findViewById(btnId);
         buttonUp.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                new FlyClient(direction,field).execute();
-                field.invalidate();
+                new FlyClient(direction).execute();
             }
         });
     }
