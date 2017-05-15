@@ -1,4 +1,5 @@
 import java.awt.List;
+import java.io.DataOutputStream;
 import java.lang.reflect.Array;
 import java.net.InetAddress;
 
@@ -17,7 +18,7 @@ public class GameHandler {
 		this.field = new Field();
 	}
 
-	public void jsonHandle(InetAddress playerAdress, JsonObject json) {
+	public void jsonHandle(DataOutputStream playerAdress, JsonObject json) {
 		switch (json.get("action").getAsString()) {
 		case "move":
 			moveHandle(playerAdress, json);
@@ -25,7 +26,7 @@ public class GameHandler {
 		}
 	}
 
-	private void moveHandle(InetAddress playerAdress, JsonObject json) {
+	private void moveHandle(DataOutputStream playerAdress, JsonObject json) {
 		switch (json.get("direction").getAsString()) {
 		case "down":
 			field.Move(playerAdress, 1, 0);
@@ -42,8 +43,8 @@ public class GameHandler {
 		}
 	}
 
-	public JsonObject PlayerInfo(InetAddress playerAdress) {
-		Player player = field.getPlayer(playerAdress);
+	public JsonObject PlayerInfo(DataOutputStream writer) {
+		Player player = field.getPlayer(writer);
 		int initX = player.getX() - Constants.FieldParams.fieldViewHeight / 2;
 		int initY = player.getY() - Constants.FieldParams.fieldViewWidth / 2;
 		StringBuilder retTiles = new StringBuilder();

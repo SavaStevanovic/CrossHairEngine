@@ -19,6 +19,7 @@ public class WebServer {
 		System.out.println("Start");
 		try {
 			WebServerRecever ws = new WebServerRecever();
+			ws.run();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

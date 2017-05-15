@@ -1,4 +1,5 @@
 import java.awt.List;
+import java.io.DataOutputStream;
 import java.lang.reflect.Array;
 import java.net.InetAddress;
 import java.util.HashMap;
@@ -10,12 +11,12 @@ import java.util.Vector;
 public class Field {
 	private Tile[][] field;
 	private Random rand = new Random();
-	private HashMap<InetAddress, Player> players;
+	private HashMap<DataOutputStream, Player> players;
 
 	public Field() {
 		super();
 		this.field = new Tile[Constants.FieldParams.fieldHeight][Constants.FieldParams.fieldWidth];
-		this.players = new HashMap<InetAddress, Player>();
+		this.players = new HashMap<DataOutputStream, Player>();
 
 		for (int i = 0; i < Constants.FieldParams.fieldHeight; i++)
 			for (int j = 0; j < Constants.FieldParams.fieldWidth; j++) {
@@ -23,18 +24,18 @@ public class Field {
 			}
 	}
 
-	public Player getPlayer(InetAddress address) {
-		if (players.containsKey(address)) {
-			return players.get(address);
+	public Player getPlayer(DataOutputStream playerAdress) {
+		if (players.containsKey(playerAdress)) {
+			return players.get(playerAdress);
 		}
 		Player player = new Player(rand.nextInt(Constants.FieldParams.fieldHeight),
 				rand.nextInt(Constants.FieldParams.fieldWidth));
-		players.put(address, player);
+		players.put(playerAdress, player);
 		field[player.getX()][player.getY()].setObject(player);
 		return player;
 	}
 
-	public void Move(InetAddress playerAdress, int i, int j) {
+	public void Move(DataOutputStream playerAdress, int i, int j) {
 		Player player = getPlayer(playerAdress);
 		field[player.getX()][player.getY()].setObject(null);
 		player.move(i, j);

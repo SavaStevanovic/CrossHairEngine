@@ -45,15 +45,14 @@ public class FlyClient extends AsyncTask<Void, Void, Void> {
     Direction direction;
     JsonParser jsonParser;
 
-    public FlyClient(Direction direction) {
+    public FlyClient(Direction direction,Socket socket) {
         this.direction = direction;
+        this.socket=socket;
     }
 
     @Override
     protected Void doInBackground(Void... params) {
         try {
-            socket = new Socket();
-            socket.connect(new InetSocketAddress(hostName, portNumber), 5000);
             out = new DataOutputStream(socket.getOutputStream());
         } catch (Exception e) {
             e.printStackTrace();

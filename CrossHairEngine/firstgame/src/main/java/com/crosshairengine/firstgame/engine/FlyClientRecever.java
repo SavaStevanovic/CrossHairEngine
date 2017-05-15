@@ -18,41 +18,22 @@ import java.net.Socket;
  * Created by Sava on 5/10/2017.
  */
 
-public class FlyClientRecever extends AsyncTask<Void, Void, JsonObject> {
+public class FlyClientRecever extends Thread {
 
     String hostName = "192.168.0.103";
-    int portNumber = 4322;
+    int portNumber = 4321;
     Socket socket;
     DataOutputStream out;
     private DataInputStream in;
     Field field;
     JsonParser jsonParser;
 
-    public FlyClientRecever( Field field) {
+    public FlyClientRecever(Field field,Socket socket) {
         this.field = field;
         jsonParser = new JsonParser();
+        this.socket=socket;
     }
 
-    @Override
-    protected JsonObject doInBackground(Void... params) {
-        try {
-            socket = new Socket();
-            socket.connect(new InetSocketAddress(hostName, portNumber), 5000);
-            in = new DataInputStream(socket.getInputStream());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        String weaverResponse = null;
-        try {
-            weaverResponse = in.readUTF();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        JsonElement ret = jsonParser.parse(weaverResponse);
-        return ret.getAsJsonObject();
-    }
-
-    @Override
     protected void onPostExecute(JsonObject result) {
         int x, y;
         String[] stringArray = result.get("Tiles").getAsString().split(",");
@@ -66,9 +47,27 @@ public class FlyClientRecever extends AsyncTask<Void, Void, JsonObject> {
         JsonArray playerArray = result.get("AllPlayers").getAsJsonArray();
         for (JsonElement playerJson : playerArray) {
             JsonObject jsonEnemyPlayer = playerJson.getAsJsonObject();
-            field.addPlayer(1, jsonEnemyPlayer.get("x").getAsInt()-x, jsonEnemyPlayer.get("y").getAsInt()-y);
+            field.addPlayer(1, jsonEnemyPlayer.get("x").getAsInt() - x, jsonEnemyPlayer.get("y").getAsInt() - y);
         }
-        field.invalidate();
-        this.execute();
+        field.postInvalidate();
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            try {
+                in = new DataInputStream(socket.getInputStream());
+
+                String weaverResponse = null;
+
+                weaverResponse = in.readUTF();
+
+                JsonElement ret = jsonParser.parse(weaverResponse);
+                onPostExecute(ret.getAsJsonObject());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
+
