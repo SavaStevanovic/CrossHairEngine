@@ -16,15 +16,15 @@ import com.crosshairengine.firstgame.wolf_lair.Tiles.Tile_stone;
 import java.util.HashMap;
 
 /**
- * Created by Sava on 5/9/2017.
+ * Created by CrossHairEngine team on 5/9/2017.
  */
 
 public class Player_Factory {
-    protected HashMap<Integer, Bitmap> bitmap_originals;
-    int height;
-    int weight;
-    int height_count;
-    int weight_count;
+    private HashMap<Integer, Bitmap> bitmap_originals;
+    private int height;
+    private int weight;
+    private int height_count;
+    private int weight_count;
 
     public static enum Player_type {
         FRIEND(R.drawable.player_friendly),

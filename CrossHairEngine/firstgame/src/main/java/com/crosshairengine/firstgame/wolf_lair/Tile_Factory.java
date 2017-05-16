@@ -21,11 +21,11 @@ import static android.graphics.BitmapFactory.decodeResource;
  */
 
 public class Tile_Factory {
-    protected HashMap<Integer, Bitmap> bitmap_originals;
-    int height;
-    int weight;
-    int height_count;
-    int weight_count;
+    private HashMap<Integer, Bitmap> bitmap_originals;
+    private int height;
+    private int weight;
+    private int height_count;
+    private int weight_count;
 
     public static enum Tile_type {
         GRASS(R.drawable.tile_grass ),

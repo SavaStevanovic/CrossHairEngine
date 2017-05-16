@@ -19,53 +19,28 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 
 /**
- * Created by Sava on 5/3/2017.
+ * Created by CrossHairEngine team on 5/3/2017.
  */
 
-public class FlyClient extends AsyncTask<Void, Void, Void> {
-    public static enum Direction {
-        UP("up"), DOWN("down"), LEFT("left"), RIGHT("right"), CENTER("center");
+public class FlyClientWriter extends AsyncTask<Void, Void, Void> {
 
-        private final String name;
-
-        private Direction(String s) {
-            name = s;
-        }
-
-        public String toString() {
-            return this.name;
-        }
-    }
-
-    String hostName = "192.168.0.103";
-    int portNumber = 4321;
     Socket socket;
     DataOutputStream out;
-    private DataInputStream in;
     Direction direction;
-    JsonParser jsonParser;
 
-    public FlyClient(Direction direction,Socket socket) {
+    public FlyClientWriter(Direction direction, Socket socket) {
         this.direction = direction;
-        this.socket=socket;
+        this.socket = socket;
     }
 
     @Override
     protected Void doInBackground(Void... params) {
         try {
             out = new DataOutputStream(socket.getOutputStream());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        JsonObject json = new JsonObject();
-
-        json.addProperty("action", "move");
-        json.addProperty("direction", direction.toString());
-
-        String weaverResponse = null;
-        try {
+            JsonObject json = new JsonObject();
+            json.addProperty("action", "move");
+            json.addProperty("direction", direction.toString());
             out.writeUTF(json.toString());
-
         } catch (IOException e) {
             e.printStackTrace();
         }

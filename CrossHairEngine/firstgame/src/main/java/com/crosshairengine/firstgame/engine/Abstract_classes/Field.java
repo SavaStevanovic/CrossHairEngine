@@ -18,24 +18,28 @@ import java.util.Vector;
 //All interactions should be done trough map
 //
 public abstract class Field extends View {
-    protected Tile[][] field;
+    protected Vector<Tile> field;
     protected Player userPlayer;
     protected Tile_Factory tile_factory;
     protected Player_Factory player_factory;
-    public Vector<Player> players;
+    protected Vector<Player> players;
     protected final int x, y;
 
     public Field(Context context, int x, int y) {
         super(context);
         tile_factory = new Tile_Factory(context, x, y);
         player_factory = new Player_Factory(context, x, y);
-        field = new Tile[x][y];
+        field = new Vector<Tile>();
         players = new Vector<Player>();
         this.x = x;
         this.y = y;
     }
 
-    public abstract void setElem(int x, int y, int val);
+    public abstract void setElem(int i, int val);
+
+    public int getYVal() {
+        return y;
+    }
 
     public int getXVal() {
         return x;
@@ -45,7 +49,5 @@ public abstract class Field extends View {
 
     public abstract void addPlayer(int player_type, int x, int y);
 
-    public int getYVal() {
-        return y;
-    }
+    public void clearPlayers(){ players.clear();}
 }

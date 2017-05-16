@@ -24,14 +24,14 @@ import static android.R.attr.y;
  */
 
 public class BattleField extends Field {
-    public static int y = 9;
-    public static int x = 15;
+    private static final int y = 9;
+    private static final int x = 15;
 
     public BattleField(Context context) {
         super(context, y, x);
         for (int i = 0; i < y; i++)
             for (int j = 0; j < x; j++) {
-                this.field[i][j] = this.tile_factory.getTile(Tile_Factory.Tile_type.GRASS, i, j);
+                this.field.add(this.tile_factory.getTile(Tile_Factory.Tile_type.GRASS, i, j));
             }
         userPlayer = player_factory.getPlayer(Player_Factory.Player_type.FRIEND, this.getXVal() / 2, this.getYVal() / 2);
     }
@@ -40,11 +40,9 @@ public class BattleField extends Field {
     @Override
     public void onDraw(Canvas canvas) {
         canvas.drawColor(Color.BLACK);
-        for (int i = 0; i < y; i++)
-            for (int j = 0; j < x; j++) {
-                field[i][j].drawTile(canvas);
-            }
-        //userPlayer.drawPlayer(canvas);
+        for (Tile tile : field) {
+            tile.drawTile(canvas);
+        }
         for (Player player : players) {
             player.drawPlayer(canvas);
         }
@@ -52,8 +50,8 @@ public class BattleField extends Field {
 
 
     @Override
-    public void setElem(int x, int y, int val) {
-        field[x][y] = tile_factory.getTile(Tile_Factory.Tile_type.values()[val], x, y);
+    public void setElem(int i, int val) {
+        field.set(i, tile_factory.getTile(Tile_Factory.Tile_type.values()[val], i / x, i % x));
     }
 
     @Override
@@ -63,6 +61,6 @@ public class BattleField extends Field {
 
     @Override
     public void addPlayer(int player_type, int x, int y) {
-        players.add(player_factory.getPlayer(Player_Factory.Player_type.values()[player_type], x+this.getXVal()/2, y+this.getYVal()/2));
+        players.add(player_factory.getPlayer(Player_Factory.Player_type.values()[player_type], x + this.getXVal() / 2, y + this.getYVal() / 2));
     }
 }

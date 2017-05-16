@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import com.crosshairengine.firstgame.engine.Abstract_classes.Player;
 
 /**
- * Created by Sava on 5/9/2017.
+ * Created by CrossHairEngine team on 5/9/2017.
  */
 
 public class Player_friendly extends Player {
