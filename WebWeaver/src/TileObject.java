@@ -1,5 +1,5 @@
 import com.google.gson.JsonObject;
 
-public interface FieldObject {
+public interface TileObject {
 	public JsonObject getFieldObject();
 }

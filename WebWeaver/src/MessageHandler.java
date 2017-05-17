@@ -11,17 +11,18 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class MessageHandler extends Thread {
-	private String name;
+
 	private Socket socket;
 	private DataInputStream in;
 	private DataOutputStream out;
 	private JsonParser jsonParser;
-	private WebServerRecever recever;
+	private GameHandler gameHandler;
+	private Player player;
 
-	public MessageHandler(Socket socket, WebServerRecever webServerRecever) {
+	public MessageHandler(Socket socket, GameHandler gameHandler) {
 		this.socket = socket;
 		this.jsonParser = new JsonParser();
-		this.recever = webServerRecever;
+		this.gameHandler = gameHandler;
 	}
 
 	@Override
@@ -29,20 +30,21 @@ public class MessageHandler extends Thread {
 		try {
 			in = new DataInputStream(socket.getInputStream());
 			out = new DataOutputStream(socket.getOutputStream());
-			recever.recivers.add(out);
+			player = gameHandler.getPlayer(out);
 			while (true) {
 				JsonObject messageFromClient = this.jsonParser.parse(in.readUTF()).getAsJsonObject();
 				System.out.println(messageFromClient.toString());
-				recever.gh.jsonHandle(out, messageFromClient);
-				for (DataOutputStream writer : recever.recivers) {
-					System.out.println(recever.gh.PlayerInfo(writer).toString());
-					writer.writeUTF(recever.gh.PlayerInfo(writer).toString());
-				}
+				gameHandler.jsonHandle(out, messageFromClient);
 			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
+			try {
+				socket.close();
+				gameHandler.removePlayer(out);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			e.printStackTrace();
 		}
-
 	}
 }

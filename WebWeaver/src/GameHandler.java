@@ -1,5 +1,6 @@
 import java.awt.List;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.net.InetAddress;
 
@@ -11,11 +12,19 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 public class GameHandler {
-	Field field;
+	private Field field;
 
 	public GameHandler() {
 		super();
 		this.field = new Field();
+	}
+
+	public Player getPlayer(DataOutputStream playerStream) {
+		return field.getPlayer(playerStream);
+	}
+
+	public void removePlayer(DataOutputStream playerStream) {
+		field.removePlayer(playerStream);
 	}
 
 	public void jsonHandle(DataOutputStream playerAdress, JsonObject json) {
@@ -23,6 +32,15 @@ public class GameHandler {
 		case "move":
 			moveHandle(playerAdress, json);
 			break;
+		}
+		for (DataOutputStream writer : field.getGamePlayersSockets()) {
+			try {
+				System.out.println(PlayerInfo(writer).toString());
+
+				writer.writeUTF(PlayerInfo(writer).toString());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -51,16 +69,13 @@ public class GameHandler {
 		JsonArray retObjects = new JsonArray();
 		for (int i = initX; i < initX + Constants.FieldParams.fieldViewHeight; i++)
 			for (int j = initY; j < initY + Constants.FieldParams.fieldViewWidth; j++) {
-				Tile tile=field.getTile(i, j);
+				Tile tile = field.getTile(i, j);
 				retTiles.append(Long.toString(tile.getType())).append(",");
-				JsonObject jsonFieldObject=tile.getFieldObject();
-				if(jsonFieldObject!=null){
+				JsonObject jsonFieldObject = tile.getFieldObject();
+				if (jsonFieldObject != null) {
 					retObjects.add(jsonFieldObject);
 				}
 			}
-		for (Player otherPlayers : field.getGamePlayers()) {
-			
-		}
 		retTiles.deleteCharAt(retTiles.length() - 1);
 		JsonObject playerJson = new JsonObject();
 		playerJson.add("Player", player.getFieldObject());

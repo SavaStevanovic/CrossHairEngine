@@ -2,13 +2,15 @@ import com.google.gson.JsonObject;
 
 public class Tile {
 	private long type;
-	private FieldObject fObject;
+	private TileObject fObject;
+	private Field field;
 
-	public Tile(int type) {
+	public Tile(Field field, int type) {
 		this.type = type;
+		this.field = field;
 	}
 
-	public void setObject(FieldObject fObject) {
+	public void setObject(TileObject fObject) {
 		this.fObject = fObject;
 	}
 

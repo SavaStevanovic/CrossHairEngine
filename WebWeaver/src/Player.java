@@ -2,7 +2,7 @@ import java.net.InetAddress;
 
 import com.google.gson.JsonObject;
 
-public class Player implements FieldObject {
+public class Player implements TileObject {
 	private int x, y;
 
 	public Player(int x, int y) {
