@@ -2,6 +2,7 @@ import java.awt.List;
 import java.io.DataOutputStream;
 import java.lang.reflect.Array;
 import java.net.InetAddress;
+import java.net.Socket;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -12,12 +13,12 @@ import java.util.Vector;
 public class Field {
 	private Tile[][] field;
 	private Random rand = new Random();
-	private HashMap<DataOutputStream, Player> players;
+	private HashMap<InetAddress, Player> players;
 
 	public Field() {
 		super();
 		this.field = new Tile[Constants.FieldParams.fieldHeight][Constants.FieldParams.fieldWidth];
-		this.players = new HashMap<DataOutputStream, Player>();
+		this.players = new HashMap<InetAddress, Player>();
 		InitField();
 	}
 
@@ -28,23 +29,23 @@ public class Field {
 			}
 	}
 
-	public Player getPlayer(DataOutputStream playerStream) {
-		if (players.containsKey(playerStream)) {
-			return players.get(playerStream);
+	public Player getPlayer(InetAddress playerAdress) {
+		if (players.containsKey(playerAdress)) {
+			return players.get(playerAdress);
 		}
 		Player player = new Player(rand.nextInt(Constants.FieldParams.fieldHeight),
 				rand.nextInt(Constants.FieldParams.fieldWidth));
-		players.put(playerStream, player);
+		players.put(playerAdress, player);
 		field[player.getX()][player.getY()].setObject(player);
 		return player;
 	}
 
-	public void removePlayer(DataOutputStream playerStream){
-		players.remove(playerStream);
+	public void removePlayer(InetAddress playerAdress){
+		players.remove(playerAdress);
 	}
 	
-	public void Move(DataOutputStream playerStream, int i, int j) {
-		Player player = getPlayer(playerStream);
+	public void Move(InetAddress playerAdress, int i, int j) {
+		Player player = getPlayer(playerAdress);
 		field[player.getX()][player.getY()].setObject(null);
 		player.move(i, j);
 		field[player.getX()][player.getY()].setObject(player);
@@ -58,7 +59,7 @@ public class Field {
 		return new Vector<Player>(players.values());
 	}
 	
-	public Set<DataOutputStream> getGamePlayersSockets() {
+	public Set<InetAddress> getGamePlayersSockets() {
 		return players.keySet();
 	}
 }

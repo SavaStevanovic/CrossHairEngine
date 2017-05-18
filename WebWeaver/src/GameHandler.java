@@ -3,6 +3,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.net.InetAddress;
+import java.net.Socket;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -13,38 +16,29 @@ import net.sf.json.JSONObject;
 
 public class GameHandler {
 	private Field field;
+	private HashSet<MessageHandler> massageHandlers;
 
 	public GameHandler() {
 		super();
 		this.field = new Field();
+		massageHandlers = new HashSet<MessageHandler>();
 	}
 
-	public Player getPlayer(DataOutputStream playerStream) {
-		return field.getPlayer(playerStream);
-	}
-
-	public void removePlayer(DataOutputStream playerStream) {
-		field.removePlayer(playerStream);
-	}
-
-	public void jsonHandle(DataOutputStream playerAdress, JsonObject json) {
+	public void jsonHandle(MessageHandler messageHandler, JsonObject json) {
 		switch (json.get("action").getAsString()) {
 		case "move":
-			moveHandle(playerAdress, json);
+			moveHandle(messageHandler, json);
 			break;
 		}
-		for (DataOutputStream writer : field.getGamePlayersSockets()) {
-			try {
-				System.out.println(PlayerInfo(writer).toString());
-
-				writer.writeUTF(PlayerInfo(writer).toString());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		for (MessageHandler messageSender : massageHandlers) {
+			String message=PlayerInfo(messageSender).toString();
+			System.out.println(message);
+			messageSender.sendMessage(message);
 		}
 	}
 
-	private void moveHandle(DataOutputStream playerAdress, JsonObject json) {
+	private void moveHandle(MessageHandler messageHandler, JsonObject json) {
+		InetAddress playerAdress= messageHandler.socket.getInetAddress();
 		switch (json.get("direction").getAsString()) {
 		case "down":
 			field.Move(playerAdress, 1, 0);
@@ -61,8 +55,8 @@ public class GameHandler {
 		}
 	}
 
-	public JsonObject PlayerInfo(DataOutputStream writer) {
-		Player player = field.getPlayer(writer);
+	public JsonObject PlayerInfo(MessageHandler messageHandler) {
+		Player player = field.getPlayer(messageHandler.socket.getInetAddress());
 		int initX = player.getX() - Constants.FieldParams.fieldViewHeight / 2;
 		int initY = player.getY() - Constants.FieldParams.fieldViewWidth / 2;
 		StringBuilder retTiles = new StringBuilder();
@@ -83,5 +77,15 @@ public class GameHandler {
 		playerJson.addProperty("Tiles", retTiles.toString());
 		playerJson.add("AllPlayers", retObjects);
 		return playerJson;
+	}
+
+	public void enterGame(MessageHandler messageHandler) {
+		massageHandlers.add(messageHandler);
+		
+	}
+	
+	public void leaveGame(MessageHandler messageHandler) {
+		massageHandlers.remove(messageHandler);
+		
 	}
 }
