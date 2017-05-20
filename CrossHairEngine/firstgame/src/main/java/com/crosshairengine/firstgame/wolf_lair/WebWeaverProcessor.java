@@ -1,5 +1,7 @@
 package com.crosshairengine.firstgame.wolf_lair;
 
+import android.graphics.Rect;
+
 import com.crosshairengine.firstgame.engine.Abstract_classes.Field;
 import com.crosshairengine.firstgame.engine.Interfaces.WebProcess;
 import com.google.gson.JsonArray;
@@ -36,6 +38,7 @@ public class WebWeaverProcessor implements WebProcess {
             JsonObject jsonEnemyPlayer = playerJson.getAsJsonObject();
             field.addPlayer(1, jsonEnemyPlayer.get("x").getAsInt() - x, jsonEnemyPlayer.get("y").getAsInt() - y);
         }
-        field.postInvalidate();
+
+            field.postInvalidate();
     }
 }

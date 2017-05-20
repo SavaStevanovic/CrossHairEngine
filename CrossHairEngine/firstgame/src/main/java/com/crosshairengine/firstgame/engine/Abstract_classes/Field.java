@@ -24,6 +24,7 @@ public abstract class Field extends View {
     protected Player_Factory player_factory;
     protected Vector<Player> players;
     protected final int x, y;
+    protected int offX, offY;
 
     public Field(Context context, int x, int y) {
         super(context);
@@ -33,6 +34,8 @@ public abstract class Field extends View {
         players = new Vector<Player>();
         this.x = x;
         this.y = y;
+        offX = 0;
+        offY = 0;
     }
 
     public abstract void setElem(int i, int val);
@@ -45,9 +48,16 @@ public abstract class Field extends View {
         return x;
     }
 
-    public abstract void setUserPlayer(int player_type, int x, int y);
+    public abstract void setUserPlayer(int playerType, int x, int y);
 
-    public abstract void addPlayer(int player_type, int x, int y);
+    public abstract void addPlayer(int playerType, int x, int y);
 
-    public void clearPlayers(){ players.clear();}
+    public void clearPlayers() {
+        players.clear();
+    }
+
+    public void offsetField(int x, int y) {
+        offX += x;
+        offY += y;
+    }
 }

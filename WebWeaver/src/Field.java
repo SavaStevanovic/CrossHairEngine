@@ -36,29 +36,40 @@ public class Field {
 		Player player = new Player(rand.nextInt(Constants.FieldParams.fieldHeight),
 				rand.nextInt(Constants.FieldParams.fieldWidth));
 		players.put(playerAdress, player);
-		field[player.getX()][player.getY()].setObject(player);
+		//field[player.getX()][player.getY()].setObject(player);
 		return player;
 	}
 
-	public void removePlayer(InetAddress playerAdress){
+	public void removePlayer(InetAddress playerAdress) {
 		players.remove(playerAdress);
 	}
-	
-	public void Move(InetAddress playerAdress, int i, int j) {
+
+	public void Move(InetAddress playerAdress, Direction direction) {
 		Player player = getPlayer(playerAdress);
-		field[player.getX()][player.getY()].setObject(null);
-		player.move(i, j);
-		field[player.getX()][player.getY()].setObject(player);
+		player.initiateMovePlayer(new Move(direction));
 	}
 
 	public Tile getTile(int x, int y) {
 		return field[x][y];
 	}
 
+	public void mapPlayers() {
+		for (Player player : players.values()) {
+			player.sync();
+			field[player.getX()][player.getY()].setObject(player);
+		}
+	}
+
+	public void relesePlayers() {
+		for (Player player : players.values()) {
+			field[player.getX()][player.getY()].setObject(null);
+		}
+	}
+
 	public Vector<Player> getGamePlayers() {
 		return new Vector<Player>(players.values());
 	}
-	
+
 	public Set<InetAddress> getGamePlayersSockets() {
 		return players.keySet();
 	}

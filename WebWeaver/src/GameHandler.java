@@ -30,27 +30,29 @@ public class GameHandler {
 			moveHandle(messageHandler, json);
 			break;
 		}
+		field.mapPlayers();
 		for (MessageHandler messageSender : massageHandlers) {
-			String message=PlayerInfo(messageSender).toString();
+			String message = PlayerInfo(messageSender).toString();
 			System.out.println(message);
 			messageSender.sendMessage(message);
 		}
+		//field.relesePlayers();
 	}
 
 	private void moveHandle(MessageHandler messageHandler, JsonObject json) {
-		InetAddress playerAdress= messageHandler.socket.getInetAddress();
+		InetAddress playerAdress = messageHandler.socket.getInetAddress();
 		switch (json.get("direction").getAsString()) {
 		case "down":
-			field.Move(playerAdress, 1, 0);
+			field.Move(playerAdress, Direction.DOWN);
 			break;
 		case "up":
-			field.Move(playerAdress, -1, 0);
+			field.Move(playerAdress, Direction.UP);
 			break;
 		case "left":
-			field.Move(playerAdress, 0, -1);
+			field.Move(playerAdress, Direction.LEFT);
 			break;
 		case "right":
-			field.Move(playerAdress, 0, 1);
+			field.Move(playerAdress, Direction.RIGHT);
 			break;
 		}
 	}
@@ -81,11 +83,12 @@ public class GameHandler {
 
 	public void enterGame(MessageHandler messageHandler) {
 		massageHandlers.add(messageHandler);
-		
+		field.getPlayer(messageHandler.socket.getInetAddress());
+
 	}
-	
+
 	public void leaveGame(MessageHandler messageHandler) {
 		massageHandlers.remove(messageHandler);
-		
+
 	}
 }

@@ -6,6 +6,7 @@ public class Constants {
 		public static final int fieldTypes = 2;
 		public static final int fieldViewWidth = 15;
 		public static final int fieldViewHeight = 9;
+		public static final int baseTurnLength  = 20;
 	}
 
 	public static class TileType {

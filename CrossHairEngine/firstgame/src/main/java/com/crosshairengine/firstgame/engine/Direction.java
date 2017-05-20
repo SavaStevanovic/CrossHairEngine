@@ -1,7 +1,7 @@
 package com.crosshairengine.firstgame.engine;
 
 /**
- * Created by Sava on 5/16/2017.
+ * Created by CrossHairEngine team on 5/16/2017.
  */
 
 public enum Direction {
