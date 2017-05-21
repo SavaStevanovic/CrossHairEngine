@@ -10,31 +10,43 @@
 
     <RelativeLayout
         android:id="@+id/overlay"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="@color/colorPrimary"/>
+        android:layout_width="0dp"
+        android:layout_height="343dp"
+        android:background="@color/colorPrimary"
+        tools:layout_editor_absoluteY="8dp"
+        tools:layout_editor_absoluteX="8dp" />
 
     <RelativeLayout
         android:id="@+id/underlay"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:gravity="center">
+        android:layout_width="576dp"
+        android:layout_height="343dp"
+        android:gravity="center"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp">
         <Button
             android:id="@+id/ImageButtonUp"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="@drawable/direction_up"
             android:clickable="true"
+            android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/ImageButtonLeft"
             android:layout_toEndOf="@+id/ImageButtonLeft"
-           ></Button>
+            android:layout_marginTop="111dp"></Button>
         <Button
             android:id="@+id/ImageButtonLeft"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:background="@drawable/direction_left"
             android:clickable="true"
-            android:layout_below="@+id/ImageButtonUp" />
+            android:layout_below="@+id/ImageButtonUp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="11dp"
+            android:layout_marginStart="11dp" />
         <Button
             android:id="@+id/ImageButtonDown"
             android:layout_width="60dp"
@@ -55,6 +67,18 @@
             android:background="@drawable/direction_right"
             android:clickable="true"></Button>
 
+        <Button
+            android:id="@+id/ImageButtonFire"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/direction_right"
+            android:clickable="true"
+            android:layout_marginRight="21dp"
+            android:layout_marginEnd="21dp"
+            android:layout_alignTop="@+id/ImageButtonRight"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="18dp"></Button>
 
     </RelativeLayout>
 

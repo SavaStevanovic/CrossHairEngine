@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.os.AsyncTask;
 
 import com.crosshairengine.firstgame.engine.Abstract_classes.Field;
+import com.crosshairengine.firstgame.engine.Commands.Command;
 import com.crosshairengine.firstgame.wolf_lair.Player_Factory;
 import com.crosshairengine.firstgame.wolf_lair.Players.Player_friendly;
 import com.google.gson.JsonArray;
@@ -26,9 +27,9 @@ public class FlyClientWriter extends AsyncTask<Void, Void, Void> {
 
     Socket socket;
     DataOutputStream out;
-    Direction direction;
+    Command direction;
 
-    public FlyClientWriter(Direction direction, Socket socket) {
+    public FlyClientWriter(Command direction, Socket socket) {
         this.direction = direction;
         this.socket = socket;
     }
