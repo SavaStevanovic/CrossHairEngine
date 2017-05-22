@@ -7,9 +7,11 @@ public class Constants {
 		public static final int fieldViewWidth = 15;
 		public static final int fieldViewHeight = 9;
 		public static final int baseTurnLength  = 20;
+		public static final int baseBulletTravel  = 5;
 	}
 
 	public static class TileType {
 		public static final int grass = 0;
+		public static final int rock = 1;
 	}
 }

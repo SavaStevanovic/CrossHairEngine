@@ -1,18 +1,8 @@
-import java.awt.List;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.InetAddress;
-import java.net.Socket;
-import java.util.HashMap;
 import java.util.HashSet;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 public class GameHandler {
 	private Field field;
@@ -29,6 +19,9 @@ public class GameHandler {
 		case "move":
 			moveHandle(messageHandler, json);
 			break;
+		case "fire":
+			fireHandle(messageHandler, json);
+			break;
 		}
 		field.mapPlayers();
 		for (MessageHandler messageSender : massageHandlers) {
@@ -36,7 +29,12 @@ public class GameHandler {
 			System.out.println(message);
 			messageSender.sendMessage(message);
 		}
-		//field.relesePlayers();
+		field.relesePlayers();
+	}
+
+	private void fireHandle(MessageHandler messageHandler, JsonObject json) {
+		InetAddress playerAdress = messageHandler.socket.getInetAddress();
+		field.fire(playerAdress);
 	}
 
 	private void moveHandle(MessageHandler messageHandler, JsonObject json) {

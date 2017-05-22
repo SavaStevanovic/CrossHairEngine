@@ -13,6 +13,7 @@ import java.util.Vector;
 public class Field {
 	private Tile[][] field;
 	private Random rand = new Random();
+	private Set<Bullet> bullets;
 	private HashMap<InetAddress, Player> players;
 
 	public Field() {
@@ -36,7 +37,6 @@ public class Field {
 		Player player = new Player(rand.nextInt(Constants.FieldParams.fieldHeight),
 				rand.nextInt(Constants.FieldParams.fieldWidth));
 		players.put(playerAdress, player);
-		//field[player.getX()][player.getY()].setObject(player);
 		return player;
 	}
 
@@ -72,5 +72,11 @@ public class Field {
 
 	public Set<InetAddress> getGamePlayersSockets() {
 		return players.keySet();
+	}
+
+	public void fire(InetAddress playerAdress) {
+		Player player = getPlayer(playerAdress);
+		bullets.add(new Bullet(playerAdress, player.getX(), player.getY(), player.getMove(),
+				Constants.FieldParams.baseBulletTravel));
 	}
 }

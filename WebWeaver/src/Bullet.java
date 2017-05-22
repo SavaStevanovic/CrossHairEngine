@@ -3,31 +3,30 @@ import java.util.Date;
 
 import com.google.gson.JsonObject;
 
-public class Player implements TileObject {
+public class Bullet implements TileObject, Comparable<Bullet> {
+	private InetAddress playerAdress;
 	private int x, y;
+	private int travelDistance;
 	private Move move;
 
-	public Player(int x, int y) {
+	public Bullet(InetAddress playerAdress, int x, int y, Move move, int travelDistance) {
 		super();
+		this.playerAdress=playerAdress;
 		this.x = x;
 		this.y = y;
-		this.move = new Move(Direction.CENTER);
-	}
-
-	public void initiateMovePlayer(Move move) {
-		if (new Date().getTime() - this.move.getMoveStart() > Constants.FieldParams.baseTurnLength) {
-			if (!move.isExecuted()) {
-				movePlayer();
-			}
-			this.move = move;
+		this.travelDistance=travelDistance;
+		if(move.getDirection()==Direction.CENTER){
+			move=new Move(Direction.RIGHT);
 		}
+		this.move = move;
 	}
 
-	private void movePlayer() {
+	public void moveBullet() {
 		move.execute();
 		Direction direction = move.getDirection();
 		this.x += direction.getX();
 		this.y += direction.getY();
+		travelDistance-=1;
 	}
 
 	public int getX() {
@@ -38,15 +37,8 @@ public class Player implements TileObject {
 		return y;
 	}
 
-	public void sync() {
-		long time = new Date().getTime() - move.getMoveStart();
-		if (!move.isExecuted() && time > Constants.FieldParams.baseTurnLength / 2) {
-			movePlayer();
-		}
-	}
-
-	public Move getMove() {
-		return move;
+	public int getTravelDistance() {
+		return travelDistance;
 	}
 
 	@Override
@@ -61,5 +53,11 @@ public class Player implements TileObject {
 		json.addProperty("x", x);
 		json.addProperty("y", y);
 		return json;
+	}
+
+	@Override
+	public int compareTo(Bullet bullet) {
+		long comp = this.move.getMoveStart() - bullet.move.getMoveStart();
+		return (int) Math.signum(comp);
 	}
 }
