@@ -1,5 +1,7 @@
 import java.net.InetAddress;
 import java.util.HashSet;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -7,11 +9,14 @@ import com.google.gson.JsonObject;
 public class GameHandler {
 	private Field field;
 	private HashSet<MessageHandler> massageHandlers;
+	private HashSet<BulletHandler> bulletHandlers;
+	public static ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
 
 	public GameHandler() {
 		super();
 		this.field = new Field();
 		massageHandlers = new HashSet<MessageHandler>();
+		bulletHandlers = new HashSet<BulletHandler>();
 	}
 
 	public void jsonHandle(MessageHandler messageHandler, JsonObject json) {
@@ -34,23 +39,26 @@ public class GameHandler {
 
 	private void fireHandle(MessageHandler messageHandler, JsonObject json) {
 		InetAddress playerAdress = messageHandler.socket.getInetAddress();
-		field.fire(playerAdress);
+		double bulletID=field.fire(playerAdress);
+		BulletHandler bulletHandler=new BulletHandler(this, bulletID);
+		bulletHandlers.add(bulletHandler);
+		executor.schedule(bulletHandler, 1000, TimeUnit.MILLISECONDS);
 	}
 
 	private void moveHandle(MessageHandler messageHandler, JsonObject json) {
 		InetAddress playerAdress = messageHandler.socket.getInetAddress();
 		switch (json.get("direction").getAsString()) {
 		case "down":
-			field.Move(playerAdress, Direction.DOWN);
+			field.movePlayer(playerAdress, Direction.DOWN);
 			break;
 		case "up":
-			field.Move(playerAdress, Direction.UP);
+			field.movePlayer(playerAdress, Direction.UP);
 			break;
 		case "left":
-			field.Move(playerAdress, Direction.LEFT);
+			field.movePlayer(playerAdress, Direction.LEFT);
 			break;
 		case "right":
-			field.Move(playerAdress, Direction.RIGHT);
+			field.movePlayer(playerAdress, Direction.RIGHT);
 			break;
 		}
 	}
@@ -87,6 +95,14 @@ public class GameHandler {
 
 	public void leaveGame(MessageHandler messageHandler) {
 		massageHandlers.remove(messageHandler);
+	}
 
+	public void destroyBullet(BulletHandler bulletHandler) {
+		bulletHandlers.remove(bulletHandler);
+		field.removeBullet(bulletHandler.getBulletId());
+	}
+	
+	public void bulletMove(double bulletID) {
+		field.moveBullet(bulletID);
 	}
 }

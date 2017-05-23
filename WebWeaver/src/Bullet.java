@@ -1,9 +1,11 @@
 import java.net.InetAddress;
 import java.util.Date;
+import java.util.Random;
 
 import com.google.gson.JsonObject;
 
-public class Bullet implements TileObject, Comparable<Bullet> {
+public class Bullet implements TileObject{
+	private double bulletID;
 	private InetAddress playerAdress;
 	private int x, y;
 	private int travelDistance;
@@ -11,6 +13,7 @@ public class Bullet implements TileObject, Comparable<Bullet> {
 
 	public Bullet(InetAddress playerAdress, int x, int y, Move move, int travelDistance) {
 		super();
+		this.bulletID=Math.random();
 		this.playerAdress=playerAdress;
 		this.x = x;
 		this.y = y;
@@ -55,9 +58,7 @@ public class Bullet implements TileObject, Comparable<Bullet> {
 		return json;
 	}
 
-	@Override
-	public int compareTo(Bullet bullet) {
-		long comp = this.move.getMoveStart() - bullet.move.getMoveStart();
-		return (int) Math.signum(comp);
+	public double getBulletID() {
+		return bulletID;
 	}
 }

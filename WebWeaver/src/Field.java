@@ -9,11 +9,14 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Field {
 	private Tile[][] field;
 	private Random rand = new Random();
-	private Set<Bullet> bullets;
+	private HashMap<Double, Bullet> bullets;
 	private HashMap<InetAddress, Player> players;
 
 	public Field() {
@@ -44,9 +47,13 @@ public class Field {
 		players.remove(playerAdress);
 	}
 
-	public void Move(InetAddress playerAdress, Direction direction) {
+	public void movePlayer(InetAddress playerAdress, Direction direction) {
 		Player player = getPlayer(playerAdress);
 		player.initiateMovePlayer(new Move(direction));
+	}
+	
+	public void moveBullet(double bulletID) {
+		bullets.get(bulletID).moveBullet();
 	}
 
 	public Tile getTile(int x, int y) {
@@ -74,9 +81,15 @@ public class Field {
 		return players.keySet();
 	}
 
-	public void fire(InetAddress playerAdress) {
+	public double fire(InetAddress playerAdress) {
 		Player player = getPlayer(playerAdress);
-		bullets.add(new Bullet(playerAdress, player.getX(), player.getY(), player.getMove(),
-				Constants.FieldParams.baseBulletTravel));
+		Bullet bullet = new Bullet(playerAdress, player.getX(), player.getY(), player.getMove(),
+				Constants.FieldParams.baseBulletTravel);
+		bullets.put(bullet.getBulletID(), bullet);
+		return bullet.getBulletID();
+	}
+	
+	public void removeBullet(double bulletID) {
+		bullets.remove(bulletID);
 	}
 }
