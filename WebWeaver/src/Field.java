@@ -25,45 +25,24 @@ public class Field {
 	private void InitField() {
 		for (int i = 0; i < Constants.FieldParams.fieldHeight; i++)
 			for (int j = 0; j < Constants.FieldParams.fieldWidth; j++) {
-				field[i][j] = new Tile(this, Constants.TileType.grass + rand.nextInt(Constants.FieldParams.fieldTypes));
+				field[i][j] = new Tile(Constants.TileType.grass + rand.nextInt(Constants.FieldParams.fieldTypes));
 			}
 	}
 
+	public boolean containsPlayer(InetAddress inetAddress) {
+		return players.containsKey(inetAddress);
+	}
+
 	public Player getPlayer(InetAddress playerAdress) {
-		if (players.containsKey(playerAdress)) {
-			return players.get(playerAdress);
-		}
-		Player player = new Player(rand.nextInt(Constants.FieldParams.fieldHeight),
-				rand.nextInt(Constants.FieldParams.fieldWidth));
-		players.put(playerAdress, player);
-		//field[player.getX()][player.getY()].setObject(player);
-		return player;
+		return players.get(playerAdress);
 	}
 
 	public void removePlayer(InetAddress playerAdress) {
 		players.remove(playerAdress);
 	}
 
-	public void Move(InetAddress playerAdress, Direction direction) {
-		Player player = getPlayer(playerAdress);
-		player.initiateMovePlayer(new Move(direction));
-	}
-
 	public Tile getTile(int x, int y) {
 		return field[x][y];
-	}
-
-	public void mapPlayers() {
-		for (Player player : players.values()) {
-			player.sync();
-			field[player.getX()][player.getY()].setObject(player);
-		}
-	}
-
-	public void relesePlayers() {
-		for (Player player : players.values()) {
-			field[player.getX()][player.getY()].setObject(null);
-		}
 	}
 
 	public Vector<Player> getGamePlayers() {
@@ -72,5 +51,16 @@ public class Field {
 
 	public Set<InetAddress> getGamePlayersSockets() {
 		return players.keySet();
+	}
+
+	public void addPlayer(Player player) {
+		players.put(player.getAddress(), player);
+		field[player.getX()][player.getY()].setFObject(player);
+	}
+
+	public void moveFObject(TileObject fObject) {
+		field[fObject.getX()][fObject.getY()].free();
+		fObject.mObject();
+		field[fObject.getX()][fObject.getY()].setFObject(fObject);
 	}
 }

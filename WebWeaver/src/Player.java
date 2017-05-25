@@ -1,29 +1,29 @@
 import java.net.InetAddress;
 import java.util.Date;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 public class Player implements TileObject {
 	private int x, y;
 	private Move move;
+	private Field field;
+	private MessageHandler messageHandler;
 
-	public Player(int x, int y) {
+	public Player(MessageHandler messageHandeler, Field field, int x, int y) {
 		super();
 		this.x = x;
 		this.y = y;
+		this.field = field;
+		this.messageHandler = messageHandeler;
 		this.move = new Move(Direction.CENTER);
 	}
 
-	public void initiateMovePlayer(Move move) {
-		if (new Date().getTime() - this.move.getMoveStart() > Constants.FieldParams.baseTurnLength) {
-			if (!move.isExecuted()) {
-				movePlayer();
-			}
-			this.move = move;
-		}
+	private void movePlayer() {
+		field.moveFObject(this);
 	}
 
-	private void movePlayer() {
+	public void mObject() {
 		move.execute();
 		Direction direction = move.getDirection();
 		this.x += direction.getX();
@@ -38,13 +38,13 @@ public class Player implements TileObject {
 		return y;
 	}
 
-	public void sync(){
+	public void sync() {
 		long time = new Date().getTime() - move.getMoveStart();
 		if (!move.isExecuted() && time > Constants.FieldParams.baseTurnLength / 2) {
 			movePlayer();
 		}
 	}
-	
+
 	@Override
 	public JsonObject getFieldObject() {
 		long time = new Date().getTime() - move.getMoveStart();
@@ -56,5 +56,55 @@ public class Player implements TileObject {
 		json.addProperty("x", x);
 		json.addProperty("y", y);
 		return json;
+	}
+
+	public void jsonHandle(JsonObject json) {
+		switch (json.get("action").getAsString()) {
+		case "move":
+			JsonProccessor.proccess(this, json);
+			break;
+		}
+	}
+
+	public void PlayerInfo() {
+		int initX = getX() - Constants.FieldParams.fieldViewHeight / 2;
+		int initY = getY() - Constants.FieldParams.fieldViewWidth / 2;
+		StringBuilder retTiles = new StringBuilder();
+		JsonArray retObjects = new JsonArray();
+		for (int i = initX; i < initX + Constants.FieldParams.fieldViewHeight; i++)
+			for (int j = initY; j < initY + Constants.FieldParams.fieldViewWidth; j++) {
+				Tile tile = field.getTile(i, j);
+				retTiles.append(Long.toString(tile.getType())).append(",");
+				TileObject fObject = tile.getFObject();
+				if (fObject != null) {
+					retObjects.add(fObject.getFieldObject());
+				}
+			}
+		retTiles.deleteCharAt(retTiles.length() - 1);
+		JsonObject playerJson = new JsonObject();
+		playerJson.add("Player", getFieldObject());
+		playerJson.addProperty("Name", "Player");
+		playerJson.addProperty("Tiles", retTiles.toString());
+		playerJson.add("AllPlayers", retObjects);
+		messageHandler.sendMessage(playerJson.toString());
+	}
+
+	public void Move(Direction direction) {
+		if (new Date().getTime() - this.move.getMoveStart() > Constants.FieldParams.baseTurnLength) {
+			if (!this.move.isExecuted()) {
+				movePlayer();
+			}
+			this.move = new Move(direction);
+			PlayerInfo();
+		}
+	}
+
+	public InetAddress getAddress() {
+		return messageHandler.socket.getInetAddress();
+	}
+
+	@Override
+	public Move getMove() {
+		return this.move;
 	}
 }

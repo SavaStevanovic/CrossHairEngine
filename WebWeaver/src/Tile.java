@@ -3,14 +3,23 @@ import com.google.gson.JsonObject;
 public class Tile {
 	private long type;
 	private TileObject fObject;
-	private Field field;
+	private boolean reserve;
 
-	public Tile(Field field, int type) {
+	public Tile(int type) {
 		this.type = type;
-		this.field = field;
+		reserve = false;
 	}
 
-	public void setObject(TileObject fObject) {
+	public void reserve() {
+		reserve = true;
+	}
+
+	public void free() {
+		fObject = null;
+		reserve = false;
+	}
+
+	public void setFObject(TileObject fObject) {
 		this.fObject = fObject;
 	}
 
@@ -18,10 +27,7 @@ public class Tile {
 		return type;
 	}
 
-	public JsonObject getFieldObject() {
-		if (fObject != null) {
-			return fObject.getFieldObject();
-		}
-		return null;
+	public TileObject getFObject() {
+		return fObject;
 	}
 }

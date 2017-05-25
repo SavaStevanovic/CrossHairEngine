@@ -6,6 +6,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Random;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -17,68 +18,23 @@ import net.sf.json.JSONObject;
 public class GameHandler {
 	private Field field;
 	private HashSet<MessageHandler> massageHandlers;
+	private Random randomGenerator;
 
 	public GameHandler() {
 		super();
 		this.field = new Field();
 		massageHandlers = new HashSet<MessageHandler>();
+		randomGenerator = new Random();
 	}
 
-	public void jsonHandle(MessageHandler messageHandler, JsonObject json) {
-		switch (json.get("action").getAsString()) {
-		case "move":
-			moveHandle(messageHandler, json);
-			break;
+	public Player getPlayer(MessageHandler messageHandler) {
+		InetAddress playerAddress = messageHandler.socket.getInetAddress();
+		if (!field.containsPlayer(playerAddress)) {
+			field.addPlayer(
+					new Player(messageHandler, field, randomGenerator.nextInt(Constants.FieldParams.fieldHeight),
+							randomGenerator.nextInt(Constants.FieldParams.fieldWidth)));
 		}
-		field.mapPlayers();
-		for (MessageHandler messageSender : massageHandlers) {
-			String message = PlayerInfo(messageSender).toString();
-			System.out.println(message);
-			messageSender.sendMessage(message);
-		}
-		//field.relesePlayers();
-	}
-
-	private void moveHandle(MessageHandler messageHandler, JsonObject json) {
-		InetAddress playerAdress = messageHandler.socket.getInetAddress();
-		switch (json.get("direction").getAsString()) {
-		case "down":
-			field.Move(playerAdress, Direction.DOWN);
-			break;
-		case "up":
-			field.Move(playerAdress, Direction.UP);
-			break;
-		case "left":
-			field.Move(playerAdress, Direction.LEFT);
-			break;
-		case "right":
-			field.Move(playerAdress, Direction.RIGHT);
-			break;
-		}
-	}
-
-	public JsonObject PlayerInfo(MessageHandler messageHandler) {
-		Player player = field.getPlayer(messageHandler.socket.getInetAddress());
-		int initX = player.getX() - Constants.FieldParams.fieldViewHeight / 2;
-		int initY = player.getY() - Constants.FieldParams.fieldViewWidth / 2;
-		StringBuilder retTiles = new StringBuilder();
-		JsonArray retObjects = new JsonArray();
-		for (int i = initX; i < initX + Constants.FieldParams.fieldViewHeight; i++)
-			for (int j = initY; j < initY + Constants.FieldParams.fieldViewWidth; j++) {
-				Tile tile = field.getTile(i, j);
-				retTiles.append(Long.toString(tile.getType())).append(",");
-				JsonObject jsonFieldObject = tile.getFieldObject();
-				if (jsonFieldObject != null) {
-					retObjects.add(jsonFieldObject);
-				}
-			}
-		retTiles.deleteCharAt(retTiles.length() - 1);
-		JsonObject playerJson = new JsonObject();
-		playerJson.add("Player", player.getFieldObject());
-		playerJson.addProperty("Name", "Player");
-		playerJson.addProperty("Tiles", retTiles.toString());
-		playerJson.add("AllPlayers", retObjects);
-		return playerJson;
+		return field.getPlayer(playerAddress);
 	}
 
 	public void enterGame(MessageHandler messageHandler) {

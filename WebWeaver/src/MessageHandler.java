@@ -18,6 +18,7 @@ public class MessageHandler extends Thread {
 	private DataOutputStream out;
 	private JsonParser jsonParser;
 	private GameHandler gameHandler;
+	private Player player;
 
 	public MessageHandler(Socket socket, GameHandler gameHandler) {
 		this.socket = socket;
@@ -33,12 +34,12 @@ public class MessageHandler extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		gameHandler.enterGame(this);
+		player=gameHandler.getPlayer(this);
 		while (true) {
 			try {
 				JsonObject messageFromClient = this.jsonParser.parse(in.readUTF()).getAsJsonObject();
 				System.out.println(messageFromClient.toString());
-				gameHandler.jsonHandle(this, messageFromClient);
+				player.jsonHandle(messageFromClient);
 			} catch (IOException e) {
 				e.printStackTrace();
 				gameHandler.leaveGame(this);
@@ -55,6 +56,7 @@ public class MessageHandler extends Thread {
 
 	protected void sendMessage(String message) {
 		try {
+			System.out.println(message);
 			out.writeUTF(message);
 		} catch (IOException e) {
 			e.printStackTrace();
