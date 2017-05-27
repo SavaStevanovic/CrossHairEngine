@@ -9,11 +9,13 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 public class Field {
 	private Tile[][] field;
 	private Random rand = new Random();
 	private HashMap<String, TileObject> tileObjects;
+	static ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
 
 	public Field() {
 		super();

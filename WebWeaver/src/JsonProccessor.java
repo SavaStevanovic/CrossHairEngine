@@ -9,7 +9,15 @@ public class JsonProccessor {
 		case "move":
 			moveHandle(player, jsonObject);
 			break;
+		case "fire":
+			fireHandle(player, jsonObject);
+			break;
 		}
+	}
+
+	private static void fireHandle(Player player, JsonObject jsonObject) {
+		player.fire();
+		
 	}
 
 	private static void moveHandle(Player player, JsonObject jsonObject) {

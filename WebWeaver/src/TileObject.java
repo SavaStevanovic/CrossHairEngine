@@ -10,4 +10,6 @@ public interface TileObject {
 	public Move getMove();
 	
 	public void mObject();
+
+	public void sync();
 }

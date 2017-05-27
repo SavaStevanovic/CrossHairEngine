@@ -1,5 +1,6 @@
 import java.net.InetAddress;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -42,13 +43,6 @@ public class Player implements TileObject {
 		return y;
 	}
 
-	public void sync() {
-		long time = new Date().getTime() - move.getMoveStart();
-		if (!move.isExecuted() && time > Constants.FieldParams.baseTurnLength / 2) {
-			movePlayer();
-		}
-	}
-
 	@Override
 	public JsonObject getFieldObject() {
 		long time = new Date().getTime() - move.getMoveStart();
@@ -64,11 +58,7 @@ public class Player implements TileObject {
 	}
 
 	public void jsonHandle(JsonObject json) {
-		switch (json.get("action").getAsString()) {
-		case "move":
 			JsonProccessor.proccess(this, json);
-			break;
-		}
 	}
 
 	public void PlayerInfo() {
@@ -96,6 +86,15 @@ public class Player implements TileObject {
 		}
 	}
 
+	public void sync() {
+		if (new Date().getTime() - this.move.getMoveStart() > Constants.FieldParams.baseTurnLength) {
+			if (!this.move.isExecuted()) {
+				movePlayer();
+			}
+		}
+		PlayerInfo();
+	}
+	
 	public void Move(Direction direction) {
 		if (new Date().getTime() - this.move.getMoveStart() > Constants.FieldParams.baseTurnLength) {
 			if (!this.move.isExecuted()) {
@@ -121,5 +120,9 @@ public class Player implements TileObject {
 	public void disconect() {
 		this.messageHandler = null;
 
+	}
+	
+	public void fire(){
+		field.executor.schedule(new Bullet(this.getAddress(), field, x, y, move, 5), Constants.FieldParams.baseTurnLength/2, TimeUnit.MILLISECONDS);
 	}
 }

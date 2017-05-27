@@ -1,9 +1,10 @@
 import java.util.Date;
 import java.util.UUID;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-public class Bullet implements TileObject {
+public class Bullet implements TileObject, Runnable {
 	private String bulletID;
 	private String playerAdress;
 	private int x, y;
@@ -60,6 +61,35 @@ public class Bullet implements TileObject {
 		Direction direction = move.getDirection();
 		this.x += direction.getX();
 		this.y += direction.getY();
+	}
+
+	@Override
+	public void run() {
+		while(travelDistance-->0){
+			sync();
+			try {
+				Thread.sleep(Constants.FieldParams.baseTurnLength);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+	}
+
+	@Override
+	public void sync() {
+		int initX = getX() - Constants.FieldParams.fieldViewHeight / 2;
+		int initY = getY() - Constants.FieldParams.fieldViewWidth / 2;
+		for (int i = initX; i < initX + Constants.FieldParams.fieldViewHeight; i++)
+			for (int j = initY; j < initY + Constants.FieldParams.fieldViewWidth; j++) {
+				Tile tile = field.getTile(i, j);
+			
+				TileObject fObject = tile.getFObject();
+				if (fObject != null) {
+					fObject.sync();
+				}
+			}
 	}
 
 }
