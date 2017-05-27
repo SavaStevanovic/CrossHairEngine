@@ -30,21 +30,11 @@ public class GameHandler {
 	public Player getPlayer(MessageHandler messageHandler) {
 		InetAddress playerAddress = messageHandler.socket.getInetAddress();
 		if (!field.containsPlayer(playerAddress)) {
-			field.addPlayer(
-					new Player(messageHandler, field, randomGenerator.nextInt(Constants.FieldParams.fieldHeight),
-							randomGenerator.nextInt(Constants.FieldParams.fieldWidth)));
+			field.addPlayer(new Player(messageHandler,field, randomGenerator.nextInt(Constants.FieldParams.fieldHeight),
+					randomGenerator.nextInt(Constants.FieldParams.fieldWidth)));
 		}
-		return field.getPlayer(playerAddress);
-	}
-
-	public void enterGame(MessageHandler messageHandler) {
-		massageHandlers.add(messageHandler);
-		field.getPlayer(messageHandler.socket.getInetAddress());
-
-	}
-
-	public void leaveGame(MessageHandler messageHandler) {
-		massageHandlers.remove(messageHandler);
-
+		Player player=(Player) field.getTileObject(playerAddress.toString());
+		player.connect(messageHandler);
+		return player;
 	}
 }

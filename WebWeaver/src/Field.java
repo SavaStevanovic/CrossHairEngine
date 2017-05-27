@@ -13,12 +13,12 @@ import java.util.Vector;
 public class Field {
 	private Tile[][] field;
 	private Random rand = new Random();
-	private HashMap<InetAddress, Player> players;
+	private HashMap<String, TileObject> tileObjects;
 
 	public Field() {
 		super();
 		this.field = new Tile[Constants.FieldParams.fieldHeight][Constants.FieldParams.fieldWidth];
-		this.players = new HashMap<InetAddress, Player>();
+		this.tileObjects = new HashMap<String, TileObject>();
 		InitField();
 	}
 
@@ -30,31 +30,27 @@ public class Field {
 	}
 
 	public boolean containsPlayer(InetAddress inetAddress) {
-		return players.containsKey(inetAddress);
+		return tileObjects.containsKey(inetAddress);
 	}
 
-	public Player getPlayer(InetAddress playerAdress) {
-		return players.get(playerAdress);
+	public TileObject getTileObject(String tileObjectId) {
+		return tileObjects.get(tileObjectId);
 	}
 
-	public void removePlayer(InetAddress playerAdress) {
-		players.remove(playerAdress);
+	public void removePlayer(InetAddress tileObjectId) {
+		tileObjects.remove(tileObjectId);
 	}
 
 	public Tile getTile(int x, int y) {
 		return field[x][y];
 	}
 
-	public Vector<Player> getGamePlayers() {
-		return new Vector<Player>(players.values());
-	}
-
-	public Set<InetAddress> getGamePlayersSockets() {
-		return players.keySet();
+	public Set<String> getTileObjectsIds() {
+		return tileObjects.keySet();
 	}
 
 	public void addPlayer(Player player) {
-		players.put(player.getAddress(), player);
+		tileObjects.put(player.getAddress(), player);
 		field[player.getX()][player.getY()].setFObject(player);
 	}
 

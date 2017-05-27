@@ -10,13 +10,17 @@ public class Player implements TileObject {
 	private Field field;
 	private MessageHandler messageHandler;
 
-	public Player(MessageHandler messageHandeler, Field field, int x, int y) {
+	public Player(MessageHandler messageHandler, Field field, int x, int y) {
 		super();
 		this.x = x;
 		this.y = y;
 		this.field = field;
-		this.messageHandler = messageHandeler;
+		this.messageHandler=messageHandler;
 		this.move = new Move(Direction.CENTER);
+	}
+
+	public void connect(MessageHandler messageHandeler) {
+		this.messageHandler = messageHandeler;
 	}
 
 	private void movePlayer() {
@@ -52,6 +56,7 @@ public class Player implements TileObject {
 		json.addProperty("direction", move.getDirection().toString());
 		json.addProperty("startTime", time);
 		json.addProperty("executed", move.isExecuted());
+		json.addProperty("moveTime", Constants.FieldParams.baseTurnLength);
 		json.addProperty("type", "player");
 		json.addProperty("x", x);
 		json.addProperty("y", y);
@@ -86,7 +91,9 @@ public class Player implements TileObject {
 		playerJson.addProperty("Name", "Player");
 		playerJson.addProperty("Tiles", retTiles.toString());
 		playerJson.add("AllPlayers", retObjects);
-		messageHandler.sendMessage(playerJson.toString());
+		if (messageHandler != null) {
+			messageHandler.sendMessage(playerJson.toString());
+		}
 	}
 
 	public void Move(Direction direction) {
@@ -95,16 +102,24 @@ public class Player implements TileObject {
 				movePlayer();
 			}
 			this.move = new Move(direction);
-			PlayerInfo();
 		}
+		PlayerInfo();
 	}
 
-	public InetAddress getAddress() {
-		return messageHandler.socket.getInetAddress();
+	public String getAddress() {
+		if(messageHandler==null){
+			return null;
+		}
+		return messageHandler.socket.getInetAddress().toString();
 	}
 
 	@Override
 	public Move getMove() {
 		return this.move;
+	}
+
+	public void disconect() {
+		this.messageHandler = null;
+
 	}
 }
