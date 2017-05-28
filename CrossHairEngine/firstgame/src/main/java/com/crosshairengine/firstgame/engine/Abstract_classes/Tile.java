@@ -9,33 +9,28 @@ import java.util.Vector;
  * Created by CrossHairEngine team on 5/1/2017.
  */
 
-//Should be part of the <Field>
+// Tile is static should be part of the Map
+// Tile is needed, so it get to be defined in engine
 //
-public abstract class Tile {
-    protected Bitmap bitmap;
-    protected int x, y;
+public abstract class Tile extends CDrawable {
 
     public Tile(Bitmap bitmap) {
-        this.bitmap = bitmap;
+        this.m_bSprate = bitmap;
     }
 
-    public Tile(Bitmap bitmap, int x, int y) {
-        this.bitmap = bitmap;
-        this.x = x;
-        this.y = y;
+    public Tile(Bitmap bitmap, int left, int top) {
+        this.m_bSprate = bitmap;
+        this.left = left;
+        this.top = top;
     }
 
-    public Tile setX(int x) {
-        this.x = x;
+    public Tile setLeft(int left) {
+        this.left = left;
         return this;
     }
 
-    public Tile setY(int y) {
-        this.y = y;
+    public Tile setTop(int top) {
+        this.top = top;
         return this;
-    }
-
-    public void drawTile(Canvas canvas) {
-        canvas.drawBitmap(bitmap, y, x, null);
     }
 }

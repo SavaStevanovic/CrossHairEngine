@@ -9,8 +9,8 @@ import java.net.Socket;
  */
 
 public class FlyInit extends Thread {
-    private String hostName = "192.168.0.103";
-    private int portNumber = 4321;
+    private String hostName = "192.168.0.105";
+    private int portNumber = 4320;
     private Socket socket;
 
     public FlyInit() {

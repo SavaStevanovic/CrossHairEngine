@@ -1,23 +1,11 @@
 package com.crosshairengine.firstgame.wolf_lair;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.util.DisplayMetrics;
-import android.view.View;
 
-import com.crosshairengine.firstgame.R;
 import com.crosshairengine.firstgame.engine.Abstract_classes.Field;
-import com.crosshairengine.firstgame.engine.Abstract_classes.Player;
 import com.crosshairengine.firstgame.engine.Abstract_classes.Tile;
-import com.crosshairengine.firstgame.wolf_lair.Players.Player_friendly;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-
-import static android.R.attr.y;
 
 /**
  * Created by CrossHairEngine team on 5/1/2017.
@@ -40,11 +28,11 @@ public class BattleField extends Field {
     @Override
     public void onDraw(Canvas canvas) {
         canvas.drawColor(Color.BLACK);
-        for (Tile tile : field) {
-            tile.drawTile(canvas);
-        }
         for (Player player : players) {
             player.drawPlayer(canvas);
+        }
+        for (Tile tile : field) {
+            tile.drawTile(canvas);
         }
     }
 
