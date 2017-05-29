@@ -1,16 +1,23 @@
 package com.crosshairengine.firstgame.engine;
 
+import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
+
 /**
  * Created by NikolaRancic on 5/21/2017.
  */
 
 public class GameEngine {
-    public long m_lTickLength;
-    public boolean m_bRunTheGame;
+    private long m_lTickLength;
+    private boolean m_bRunTheGame;
+
+
     public MainDrawingClass m_MainDrawClass;
-    public GameEngine(long framesPerSecond)
+
+    public GameEngine(Context mainActivity)
     {
-        m_lTickLength = (1000)/framesPerSecond;
+        m_MainDrawClass = MainDrawingClass.getInstance(mainActivity);
+        m_lTickLength = (1000)/60;
         m_bRunTheGame = true;
     }
 

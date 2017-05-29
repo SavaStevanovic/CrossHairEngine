@@ -1,22 +1,13 @@
 package com.crosshairengine.firstgame.engine;
 
 
-import android.graphics.Canvas;
 import android.os.AsyncTask;
 
-import com.crosshairengine.firstgame.engine.Abstract_classes.Field;
 import com.crosshairengine.firstgame.engine.Commands.Command;
-import com.crosshairengine.firstgame.wolf_lair.Player_Factory;
-import com.crosshairengine.firstgame.wolf_lair.Players.Player_friendly;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.Socket;
 
 /**
@@ -27,10 +18,10 @@ public class FlyClientWriter extends AsyncTask<Void, Void, Void> {
 
     Socket socket;
     DataOutputStream out;
-    Command direction;
+    Command command;
 
-    public FlyClientWriter(Command direction, Socket socket) {
-        this.direction = direction;
+    public FlyClientWriter(Command command, Socket socket) {
+        this.command = command;
         this.socket = socket;
     }
 
@@ -40,7 +31,7 @@ public class FlyClientWriter extends AsyncTask<Void, Void, Void> {
             out = new DataOutputStream(socket.getOutputStream());
             JsonObject json = new JsonObject();
             json.addProperty("action", "move");
-            json.addProperty("direction", direction.toString());
+            json.addProperty("direction", command.toString());
             out.writeUTF(json.toString());
         } catch (IOException e) {
             e.printStackTrace();

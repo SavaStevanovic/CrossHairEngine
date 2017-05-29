@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import com.crosshairengine.firstgame.R;
+import com.crosshairengine.firstgame.wolf_lair.Players.Player;
 import com.crosshairengine.firstgame.wolf_lair.Players.Player_enemy;
 import com.crosshairengine.firstgame.wolf_lair.Players.Player_friendly;
 import com.crosshairengine.firstgame.wolf_lair.Settings.PhoneSettings;

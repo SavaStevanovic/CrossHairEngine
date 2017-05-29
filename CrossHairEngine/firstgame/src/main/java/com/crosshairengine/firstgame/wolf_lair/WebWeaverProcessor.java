@@ -1,8 +1,6 @@
 package com.crosshairengine.firstgame.wolf_lair;
 
-import android.graphics.Rect;
-
-import com.crosshairengine.firstgame.engine.Abstract_classes.Field;
+import com.crosshairengine.firstgame.engine.GameEngine;
 import com.crosshairengine.firstgame.engine.Interfaces.WebProcess;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -15,11 +13,11 @@ import com.google.gson.JsonParser;
 
 public class WebWeaverProcessor implements WebProcess {
     private JsonParser jsonParser;
-    private Field field;
+    private GameEngine m_gameEngine;
 
-    public WebWeaverProcessor(Field field) {
+    public WebWeaverProcessor(GameEngine m_gameEngine) {
         this.jsonParser = new JsonParser();
-        this.field = field;
+        this.m_gameEngine = m_gameEngine;
     }
 
     @Override

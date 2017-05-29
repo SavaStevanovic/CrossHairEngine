@@ -1,6 +1,5 @@
 package com.crosshairengine.firstgame.engine;
 
-import com.crosshairengine.firstgame.engine.Abstract_classes.Field;
 import com.crosshairengine.firstgame.engine.Interfaces.WebProcess;
 
 import java.io.DataInputStream;
@@ -14,11 +13,10 @@ public class FlyClientReceiver extends Thread {
 
     private Socket socket;
     private DataInputStream in;
-    private Field field;
+
     private WebProcess processor;
 
     public FlyClientReceiver(Socket socket, WebProcess proccesor) {
-        this.field = field;
         this.socket = socket;
         this.processor = proccesor;
     }

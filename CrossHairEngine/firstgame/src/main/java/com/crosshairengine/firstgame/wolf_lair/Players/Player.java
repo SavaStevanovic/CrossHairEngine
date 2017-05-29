@@ -5,13 +5,13 @@ import android.graphics.Bitmap;
 import com.crosshairengine.firstgame.engine.Abstract_classes.CDrawable;
 
 /**
- * Created by Sava on 5/9/2017.
+ * Created by NikolaRancic on 5/28/2017.
  */
 
-public class Player_enemy extends Player {
-
-    public Player_enemy(Bitmap bitmap, int x, int y)
+public abstract class Player extends CDrawable {
+    public Player(Bitmap bitmap, int left, int top)
     {
-        super(bitmap, x, y);
+        super(bitmap, left, top);
     }
+
 }

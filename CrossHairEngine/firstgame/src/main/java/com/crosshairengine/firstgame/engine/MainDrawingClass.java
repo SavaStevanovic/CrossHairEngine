@@ -32,9 +32,9 @@ public class MainDrawingClass extends View {
         return _instance;
     }
 
-    public void DrawAll(Canvas canvas, ArrayList<ArrayList<CDrawable>> alDrawableObjects)
+    public void DrawAll(Canvas canvas, ObjectStorage objectStorage)
     {
-        for(ArrayList<CDrawable> iteratorList :alDrawableObjects)
+        for(ArrayList<CDrawable> iteratorList :objectStorage.getAllDrawableObjects())
             for(CDrawable iteratorDrawable : iteratorList)
                 iteratorDrawable.Draw(canvas);
     }

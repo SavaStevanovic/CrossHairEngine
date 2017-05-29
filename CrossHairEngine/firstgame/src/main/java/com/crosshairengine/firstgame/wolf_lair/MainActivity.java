@@ -9,9 +9,12 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.crosshairengine.firstgame.R;
+import com.crosshairengine.firstgame.engine.Commands.Command;
 import com.crosshairengine.firstgame.engine.Direction;
 import com.crosshairengine.firstgame.engine.FlyClientWriter;
 import com.crosshairengine.firstgame.engine.FlyClientReceiver;
+import com.crosshairengine.firstgame.engine.GameEngine;
+import com.crosshairengine.firstgame.wolf_lair.Settings.Constants;
 import com.crosshairengine.firstgame.wolf_lair.Settings.FlyInit;
 
 import java.net.Socket;
@@ -21,31 +24,38 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FlyInit fi = new FlyInit();
-        Socket socket = fi.getSocket();
 
+
+        Initialization();
+    }
+
+    private void DirectionButton(final Socket socket, int btnId, final Command command) {
+        Button buttonUp = (Button) findViewById(btnId);
+        buttonUp.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                new FlyClientWriter(command, socket).execute();
+            }
+        });
+    }
+
+    private void Initialization()
+    {
+        FlyInit fi = new FlyInit();
+        Constants.onlySocket = fi.getSocket();
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.content_main);
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.overlay);
-        BattleField main = new BattleField(this);
-        layout.addView(main, 0);
 
-        new FlyClientWriter(Direction.CENTER, socket).execute();
-
-        DirectionButton(socket,R.id.ImageButtonUp, Direction.UP);
-        DirectionButton(socket,R.id.ImageButtonDown, Direction.DOWN);
-        DirectionButton(socket,R.id.ImageButtonLeft, Direction.LEFT);
-        DirectionButton(socket,R.id.ImageButtonRight, Direction.RIGHT);
-        new FlyClientReceiver(socket, new WebWeaverProcessor(main)).start();
+        new FlyClientWriter(Command.CENTER, Constants.onlySocket).execute();
+        DirectionButton(Constants.onlySocket,R.id.ImageButtonUp, Command.MoveUP);
+        DirectionButton(Constants.onlySocket,R.id.ImageButtonDown, Command.MoveDOWN);
+        DirectionButton(Constants.onlySocket,R.id.ImageButtonLeft, Command.MoveLEFT);
+        DirectionButton(Constants.onlySocket,R.id.ImageButtonRight, Command.MoveRIGHT);
+        DirectionButton(Constants.onlySocket,R.id.ImageButtonFire, Command.Fire);
+        GameEngine main = new GameEngine(this);
+        layout.addView(main.m_MainDrawClass, 0);
+        new FlyClientReceiver(Constants.onlySocket, new WebWeaverProcessor(main)).start();
     }
 
-    private void DirectionButton(final Socket socket, int btnId, final Direction direction) {
-        Button buttonUp = (Button) findViewById(btnId);
-        buttonUp.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-                new FlyClientWriter(direction, socket).execute();
-            }
-        });
-    }
 }
