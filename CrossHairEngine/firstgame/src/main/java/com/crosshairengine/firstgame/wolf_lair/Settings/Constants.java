@@ -8,4 +8,6 @@ import java.net.Socket;
 
 public final class Constants {
     public static Socket onlySocket;
+    public static int width = 15;
+    public static int height = 9;
 }

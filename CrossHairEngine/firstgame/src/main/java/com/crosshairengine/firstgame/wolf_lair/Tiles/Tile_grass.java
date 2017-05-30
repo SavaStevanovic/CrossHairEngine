@@ -9,8 +9,8 @@ import com.crosshairengine.firstgame.engine.Abstract_classes.Tile;
  */
 
 public class Tile_grass extends Tile {
-    public Tile_grass(Bitmap bitmap, int x, int y) {
-        super(bitmap, x, y);
+    public Tile_grass(Bitmap bitmap, int leftPx, int topPx) {
+        super(bitmap, leftPx, topPx);
     }
 
     public Tile_grass(Bitmap bitmap) {

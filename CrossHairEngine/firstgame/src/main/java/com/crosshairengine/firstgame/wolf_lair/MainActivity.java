@@ -53,8 +53,13 @@ public class MainActivity extends AppCompatActivity {
         DirectionButton(Constants.onlySocket,R.id.ImageButtonLeft, Command.MoveLEFT);
         DirectionButton(Constants.onlySocket,R.id.ImageButtonRight, Command.MoveRIGHT);
         DirectionButton(Constants.onlySocket,R.id.ImageButtonFire, Command.Fire);
-        GameEngine main = new GameEngine(this);
+        GameEngine main = new GameEngine(this, Constants.width, Constants.height);
         layout.addView(main.m_MainDrawClass, 0);
+
+        // Constructors
+        //
+        Player_Factory.getInstance(this,Constants.width, Constants.height);
+        Tile_Factory.getInstance(this,Constants.width, Constants.height);
         new FlyClientReceiver(Constants.onlySocket, new WebWeaverProcessor(main)).start();
     }
 

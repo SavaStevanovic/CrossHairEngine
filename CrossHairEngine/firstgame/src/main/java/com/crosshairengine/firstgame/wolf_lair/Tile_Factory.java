@@ -21,11 +21,26 @@ import static android.graphics.BitmapFactory.decodeResource;
  */
 
 public class Tile_Factory {
+    private static Tile_Factory _instance;
+    public static Tile_Factory getInstance(Context context, int height_count, int weight_count)
+    {
+        if (_instance == null)
+            _instance = new Tile_Factory(context, height_count, weight_count);
+        return _instance;
+    }
+
+    //you use this when you are sure that _instance is not null!
+    //
+    public static Tile_Factory getInstance()
+    {
+        return _instance;
+    }
+
     private HashMap<Integer, Bitmap> bitmap_originals;
     private int height;
-    private int weight;
+    private int width;
     private int height_count;
-    private int weight_count;
+    private int width_count;
 
     public static enum Tile_type {
         GRASS(R.drawable.tile_grass ),
@@ -42,28 +57,36 @@ public class Tile_Factory {
         }
     }
 
-    public Tile_Factory(Context context, int height_count, int weight_count) {
+    private Tile_Factory(Context context, int height_count, int weight_count) {
         this.height_count = height_count;
-        this.weight_count = weight_count;
+        this.width_count = weight_count;
         bitmap_originals = new HashMap<Integer, Bitmap>();
         height = PhoneSettings.getInstance().getHeight();
-        weight = PhoneSettings.getInstance().getWeight();
+        width = PhoneSettings.getInstance().getWeight();
         for (Tile_type tile_type: Tile_type.values()) {
             Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), tile_type.getValue());
-            bmp=Bitmap.createScaledBitmap(bmp,  weight / weight_count-1, height / height_count - 1, false);
+            bmp=Bitmap.createScaledBitmap(bmp,  width / weight_count-1, height / height_count - 1, false);
             bitmap_originals.put(tile_type.getValue(), bmp);
         }
 
     }
 
-    public Tile getTile(Tile_type key, int x, int y) {
+    public Tile getTile(int val, int i) {
+        Tile_type key = Tile_Factory.Tile_type.values()[val];
+        int x = i / height_count;
+        int y = i % width;
+
         Bitmap bmp = bitmap_originals.get(key.getValue());
         int posX = x * height / height_count;
-        int posY = y * weight / weight_count;
+        int posY = y * width / width_count;
         Tile tile=null;
         switch (key) {
-            case GRASS: tile= new Tile_grass(bmp, posX, posY);break;
-            case STONE: tile= new Tile_stone(bmp, posX, posY);break;
+            case GRASS:
+                tile= new Tile_grass(bmp, posX, posY);
+                break;
+            case STONE:
+                tile= new Tile_stone(bmp, posX, posY);
+                break;
         }
         return tile;
     }

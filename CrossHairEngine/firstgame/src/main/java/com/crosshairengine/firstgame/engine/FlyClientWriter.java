@@ -30,8 +30,13 @@ public class FlyClientWriter extends AsyncTask<Void, Void, Void> {
         try {
             out = new DataOutputStream(socket.getOutputStream());
             JsonObject json = new JsonObject();
-            json.addProperty("action", "move");
-            json.addProperty("direction", command.toString());
+            if (command == Command.Fire)
+            {
+                json.addProperty("action", "fire");
+            }else{
+                json.addProperty("action", "move");
+                json.addProperty("direction", command.toString());
+            }
             out.writeUTF(json.toString());
         } catch (IOException e) {
             e.printStackTrace();
