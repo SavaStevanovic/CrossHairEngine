@@ -17,6 +17,22 @@ import java.util.HashMap;
  */
 
 public class Player_Factory {
+    private static Player_Factory _instance;
+    public static Player_Factory getInstance(Context context, int height_count, int weight_count)
+    {
+        if (_instance == null)
+            _instance = new Player_Factory(context, height_count, weight_count);
+        return _instance;
+    }
+
+    // Use this when you are sure that _instance is initialize!
+    //
+    public static Player_Factory getInstance()
+    {
+        return _instance;
+    }
+
+
     private HashMap<Integer, Bitmap> bitmap_originals;
     private int height;
     private int weight;
@@ -38,7 +54,7 @@ public class Player_Factory {
         }
     }
 
-    public Player_Factory(Context context, int height_count, int weight_count) {
+    private Player_Factory(Context context, int height_count, int weight_count) {
         this.height_count = height_count;
         this.weight_count = weight_count;
         bitmap_originals = new HashMap<Integer, Bitmap>();
@@ -52,7 +68,8 @@ public class Player_Factory {
 
     }
 
-    public Player getPlayer(Player_type key, int x, int y) {
+    public Player getPlayer(int player_type, int x, int y) {
+        Player_type key = Player_Factory.Player_type.values()[player_type];
         Bitmap bmp = bitmap_originals.get(key.getValue());
         int posX = x * height / height_count;
         int posY = y * weight / weight_count;

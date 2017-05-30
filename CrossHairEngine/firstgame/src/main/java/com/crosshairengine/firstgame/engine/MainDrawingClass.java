@@ -19,10 +19,35 @@ import java.util.ArrayList;
  */
 
 public class MainDrawingClass extends View {
+
+    //**********************************
+    // part for storing cdrawable objects
+    // not best solution because it depends on order of how maindrawingclass
+    // is drawing objects
+    //
+    private ArrayList<ArrayList<CDrawable>> m_alDrawableObjects;
+
+    public void addCDrawableArrayList(int drawingLevel, ArrayList<CDrawable> al)
+    {
+        m_alDrawableObjects.add(drawingLevel, al);
+    }
+
+    public void clearCDrawableObjectStorage()
+    {
+        m_alDrawableObjects = new ArrayList<ArrayList<CDrawable>>(5);
+    }
+
+    public ArrayList<ArrayList<CDrawable>> getAllDrawableObjects()
+    {
+        return m_alDrawableObjects;
+    }
+    //**********************************
+
     private static MainDrawingClass _instance = null;
     private MainDrawingClass(Context context)
     {
         super(context);
+        m_alDrawableObjects = new ArrayList<ArrayList<CDrawable>>(5);
     }
 
 
@@ -32,11 +57,16 @@ public class MainDrawingClass extends View {
         return _instance;
     }
 
-    public void DrawAll(Canvas canvas, ObjectStorage objectStorage)
+    public void DrawAll(Canvas canvas)
     {
-        for(ArrayList<CDrawable> iteratorList :objectStorage.getAllDrawableObjects())
+        for(ArrayList<CDrawable> iteratorList :m_alDrawableObjects)
             for(CDrawable iteratorDrawable : iteratorList)
                 iteratorDrawable.Draw(canvas);
+    }
+
+    @Override
+    public void onDraw(Canvas canvas) {
+        DrawAll(canvas);
     }
 
 }

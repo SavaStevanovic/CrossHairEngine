@@ -18,19 +18,7 @@ public abstract class Tile extends CDrawable {
         this.m_bSprate = bitmap;
     }
 
-    public Tile(Bitmap bitmap, int left, int top) {
-        this.m_bSprate = bitmap;
-        this.left = left;
-        this.top = top;
-    }
-
-    public Tile setLeft(int left) {
-        this.left = left;
-        return this;
-    }
-
-    public Tile setTop(int top) {
-        this.top = top;
-        return this;
+    public Tile(Bitmap bitmap, int leftPx, int topPx) {
+        super(bitmap, leftPx, topPx);
     }
 }

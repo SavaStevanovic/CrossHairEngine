@@ -17,15 +17,22 @@ public class Map extends CDrawable {
     private int width;
     private int height;
 
-    public Map()
+    public Map(int width, int height)
     {
         super();
-        m_alTiles = new ArrayList<>();
+        this.width = width;
+        this.height = height;
+        m_alTiles = new ArrayList<Tile>(width * height);
     }
 
     public Map(ArrayList<Tile> al)
     {
         m_alTiles = al;
+    }
+
+    public void setTile(Tile tile, int position)
+    {
+        m_alTiles.set(position, tile);
     }
 
     public Tile getTileOnPosition(int fromLeft,int fromTop)

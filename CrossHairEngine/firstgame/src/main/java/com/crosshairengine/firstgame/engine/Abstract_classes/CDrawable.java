@@ -10,18 +10,18 @@ import android.graphics.Canvas;
 
 public abstract class CDrawable {
     protected Bitmap m_bSprate;
-    protected int left;
-    protected int top;
+    protected int leftPx;
+    protected int topPx;
 
     public CDrawable(){}
 
     public CDrawable(Bitmap bitmap,int left, int top)
     {
         m_bSprate = bitmap;
-        this.top = top;
-        this.left = left;
+        this.topPx = top;
+        this.leftPx = left;
     }
 
-    public void Draw(Canvas canvas){ canvas.drawBitmap(m_bSprate, left, top, null);}
+    public void Draw(Canvas canvas){ canvas.drawBitmap(m_bSprate, leftPx, topPx, null);}
 
 }

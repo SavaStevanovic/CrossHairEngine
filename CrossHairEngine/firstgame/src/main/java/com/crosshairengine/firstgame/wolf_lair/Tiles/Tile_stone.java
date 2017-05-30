@@ -9,8 +9,9 @@ import com.crosshairengine.firstgame.engine.Abstract_classes.Tile;
  */
 
 public class Tile_stone extends Tile {
-    public Tile_stone(Bitmap bitmap, int x, int y) {
-        super(bitmap, x, y);
+    public Tile_stone(Bitmap bitmap, int leftPx, int topPx)
+    {
+        super(bitmap, leftPx, topPx);
     }
 
     public Tile_stone(Bitmap bitmap) {
