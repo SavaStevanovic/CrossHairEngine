@@ -8,10 +8,10 @@ package com.crosshairengine.firstgame.engine.Commands;
 // these commands should probably be moved to game
 //
 public enum Command {
-    MoveUP("moveUp"),
-    MoveDOWN("moveDown"),
-    MoveLEFT("moveLeft"),
-    MoveRIGHT("moveRight"),
+    MoveUP("up"),
+    MoveDOWN("down"),
+    MoveLEFT("left"),
+    MoveRIGHT("right"),
     CENTER("center"),
     Fire("fire")
     ;

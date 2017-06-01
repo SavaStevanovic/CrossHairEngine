@@ -1,5 +1,6 @@
 import java.util.Date;
 import java.util.UUID;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -11,27 +12,31 @@ public class Bullet implements TileObject, Runnable {
 	private Field field;
 	private int travelDistance;
 	private Move move;
-	
-	public Bullet(String playerAdress,Field field, int x, int y, Move move, int travelDistance) {
+	private boolean active;
+
+	public Bullet(String playerAdress, Field field, int x, int y, Move move, int travelDistance) {
 		super();
-		this.field=field;
-		this.bulletID=UUID.randomUUID().toString();
-		this.playerAdress=playerAdress;
+		active = true;
+		this.field = field;
+		this.bulletID = UUID.randomUUID().toString();
+		this.playerAdress = playerAdress;
 		this.x = x;
 		this.y = y;
-		this.travelDistance=travelDistance;
-		if(move.getDirection()==Direction.CENTER){
-			move=new Move(Direction.RIGHT);
+		this.travelDistance = travelDistance;
+		if (move.getDirection() == Direction.CENTER) {
+			move = new Move(Direction.RIGHT);
 		}
 		this.move = move;
-	} 
-	
+	}
+
 	@Override
 	public JsonObject getFieldObject() {
 		long time = new Date().getTime() - move.getMoveStart();
 		JsonObject json = new JsonObject();
 		json.addProperty("direction", move.getDirection().toString());
 		json.addProperty("startTime", time);
+		json.addProperty("startTime", time);
+		json.addProperty("active", active);
 		json.addProperty("executed", move.isExecuted());
 		json.addProperty("moveTime", Constants.FieldParams.baseTurnLength);
 		json.addProperty("type", "player");
@@ -65,16 +70,18 @@ public class Bullet implements TileObject, Runnable {
 
 	@Override
 	public void run() {
-		while(travelDistance-->0){
-			sync();
-			try {
-				Thread.sleep(Constants.FieldParams.baseTurnLength);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		if (!active) {
+			return;
 		}
-		
+		ExecutorManager.schedule(this);
+		field.moveFObject(this);
+		Tile tile = field.getTile(x, y);
+		TileObject tileObject = tile.getFObject();
+		if (tileObject != null) {
+			tileObject.destroy();
+			this.destroy();
+		}
+		sync();
 	}
 
 	@Override
@@ -84,12 +91,16 @@ public class Bullet implements TileObject, Runnable {
 		for (int i = initX; i < initX + Constants.FieldParams.fieldViewHeight; i++)
 			for (int j = initY; j < initY + Constants.FieldParams.fieldViewWidth; j++) {
 				Tile tile = field.getTile(i, j);
-			
 				TileObject fObject = tile.getFObject();
 				if (fObject != null) {
 					fObject.sync();
 				}
 			}
+	}
+
+	@Override
+	public void destroy() {
+		active = false;
 	}
 
 }

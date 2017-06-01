@@ -15,7 +15,6 @@ public class Field {
 	private Tile[][] field;
 	private Random rand = new Random();
 	private HashMap<String, TileObject> tileObjects;
-	static ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
 
 	public Field() {
 		super();
@@ -39,8 +38,8 @@ public class Field {
 		return tileObjects.get(tileObjectId);
 	}
 
-	public void removePlayer(InetAddress tileObjectId) {
-		tileObjects.remove(tileObjectId);
+	public void removePlayer(String string) {
+		tileObjects.remove(string);
 	}
 
 	public Tile getTile(int x, int y) {
@@ -60,5 +59,15 @@ public class Field {
 		field[fObject.getX()][fObject.getY()].free();
 		fObject.mObject();
 		field[fObject.getX()][fObject.getY()].setFObject(fObject);
+	}
+
+	public boolean freeToMove(Player player, Direction direction) {
+		Tile tile = field[player.getX() + direction.getX()][player.getY() + direction.getY()];
+		return tile.getFObject() == player || (tile.getFObject() == null && !tile.isReserved());
+	}
+
+	public void reserveTile(Player player, Direction direction) {
+		Tile tile = field[player.getX() + direction.getX()][player.getY() + direction.getY()];
+		tile.reserve();
 	}
 }

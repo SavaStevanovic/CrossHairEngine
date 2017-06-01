@@ -35,7 +35,6 @@ public class MessageHandler extends Thread {
 			e.printStackTrace();
 		}
 		player=gameHandler.getPlayer(this);
-		player.PlayerInfo();
 		while (true) {
 			try {
 				JsonObject messageFromClient = this.jsonParser.parse(in.readUTF()).getAsJsonObject();

@@ -30,4 +30,8 @@ public class Tile {
 	public TileObject getFObject() {
 		return fObject;
 	}
+
+	public boolean isReserved() {
+		return reserve;
+	}
 }

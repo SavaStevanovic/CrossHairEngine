@@ -16,23 +16,18 @@ public class Player implements TileObject {
 		this.x = x;
 		this.y = y;
 		this.field = field;
-		this.messageHandler=messageHandler;
 		this.move = new Move(Direction.CENTER);
+		this.messageHandler=messageHandler;
+		field.addPlayer(this);
 	}
 
 	public void connect(MessageHandler messageHandeler) {
 		this.messageHandler = messageHandeler;
-	}
-
-	private void movePlayer() {
-		field.moveFObject(this);
+		this.PlayerInfo();
 	}
 
 	public void mObject() {
 		move.execute();
-		Direction direction = move.getDirection();
-		this.x += direction.getX();
-		this.y += direction.getY();
 	}
 
 	public int getX() {
@@ -58,7 +53,7 @@ public class Player implements TileObject {
 	}
 
 	public void jsonHandle(JsonObject json) {
-			JsonProccessor.proccess(this, json);
+		JsonProccessor.proccess(this, json);
 	}
 
 	public void PlayerInfo() {
@@ -89,24 +84,26 @@ public class Player implements TileObject {
 	public void sync() {
 		if (new Date().getTime() - this.move.getMoveStart() > Constants.FieldParams.baseTurnLength) {
 			if (!this.move.isExecuted()) {
-				movePlayer();
+				field.moveFObject(this);
 			}
 		}
 		PlayerInfo();
 	}
-	
+
 	public void Move(Direction direction) {
-		if (new Date().getTime() - this.move.getMoveStart() > Constants.FieldParams.baseTurnLength) {
+		if (field.freeToMove(this, direction)
+				&& new Date().getTime() - this.move.getMoveStart() > Constants.FieldParams.baseTurnLength) {
 			if (!this.move.isExecuted()) {
-				movePlayer();
+				field.moveFObject(this);
 			}
+			field.reserveTile(this, direction);
 			this.move = new Move(direction);
 		}
 		PlayerInfo();
 	}
 
 	public String getAddress() {
-		if(messageHandler==null){
+		if (messageHandler == null) {
 			return null;
 		}
 		return messageHandler.socket.getInetAddress().toString();
@@ -121,8 +118,13 @@ public class Player implements TileObject {
 		this.messageHandler = null;
 
 	}
-	
-	public void fire(){
-		field.executor.schedule(new Bullet(this.getAddress(), field, x, y, move, 5), Constants.FieldParams.baseTurnLength/2, TimeUnit.MILLISECONDS);
+
+	public void fire() {
+		ExecutorManager.schedule(new Bullet(this.getAddress(), field, x, y, move, 5));
+	}
+
+	@Override
+	public void destroy() {
+		field.removePlayer(this.getAddress());
 	}
 }

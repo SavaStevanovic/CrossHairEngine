@@ -12,4 +12,6 @@ public interface TileObject {
 	public void mObject();
 
 	public void sync();
+	
+	public void destroy();
 }
