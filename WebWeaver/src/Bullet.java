@@ -81,11 +81,6 @@ public class Bullet implements TileObject, Runnable {
 		ExecutorManager.getInstance().schedule(this, Constants.FieldParams.baseTurnLength, TimeUnit.MILLISECONDS);
 		field.moveFObject(this);
 		Tile tile = field.getTile(x, y);
-		/*TileObject tileObject = tile.getFObject();
-		if (tileObject != null && tileObject != this) {
-			tileObject.destroy();
-			this.destroy();
-		}*/
 		sync();
 	}
 

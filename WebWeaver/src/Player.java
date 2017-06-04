@@ -42,15 +42,22 @@ public class Player implements TileObject {
 
 	@Override
 	public JsonObject getFieldObject() {
+		int xS = x;
+		int yS = y;
 		long time = new Date().getTime() - move.getMoveStart();
 		JsonObject json = new JsonObject();
-		json.addProperty("direction", move.getDirection().toString());
+		Direction direction = move.getDirection();
+		json.addProperty("direction", direction.toString());
 		json.addProperty("startTime", time);
 		json.addProperty("executed", move.isExecuted());
 		json.addProperty("moveTime", Constants.FieldParams.baseTurnLength);
 		json.addProperty("type", "player");
-		json.addProperty("x", x);
-		json.addProperty("y", y);
+		if (move.isExecuted()) {
+			xS -= direction.getX();
+			yS -= direction.getY();
+		}
+		json.addProperty("x", xS);
+		json.addProperty("y", yS);
 		return json;
 	}
 
@@ -59,12 +66,23 @@ public class Player implements TileObject {
 	}
 
 	public void PlayerInfo() {
-		int initX = getX() - Constants.FieldParams.fieldViewHeight / 2;
-		int initY = getY() - Constants.FieldParams.fieldViewWidth / 2;
+		int xS = x;
+		int yS = y;
+		Direction direction = move.getDirection();
+		if (move.isExecuted()) {
+			xS -= direction.getX();
+			yS -= direction.getY();
+		}
+		int heighOffset = direction.getX();
+		int widthOffset = direction.getY();
+		int height = Constants.FieldParams.fieldViewHeight;
+		int width = Constants.FieldParams.fieldViewWidth;
+		int initX = xS - (height + heighOffset - 1) / 2;
+		int initY = yS - (width + widthOffset - 1) / 2;
 		StringBuilder retTiles = new StringBuilder();
 		JsonArray retObjects = new JsonArray();
-		for (int i = initX; i < initX + Constants.FieldParams.fieldViewHeight; i++)
-			for (int j = initY; j < initY + Constants.FieldParams.fieldViewWidth; j++) {
+		for (int i = initX; i < initX + height + (heighOffset + 1) / 2; i++)
+			for (int j = initY; j < initY + width + (widthOffset + 1) / 2; j++) {
 				Tile tile = field.getTile(i, j);
 				retTiles.append(Long.toString(tile.getType())).append(",");
 				TileObject fObject = tile.getFObject();
@@ -124,7 +142,8 @@ public class Player implements TileObject {
 	public void fire() {
 		Direction bulletDirection = this.getMove().getDirection();
 		ExecutorManager.getInstance().schedule(
-				new Bullet(this.getAddress(), field, x + bulletDirection.getX(), y + bulletDirection.getY(), move, 5), 0, TimeUnit.MILLISECONDS);
+				new Bullet(this.getAddress(), field, x + bulletDirection.getX(), y + bulletDirection.getY(), move, 5),
+				0, TimeUnit.MILLISECONDS);
 	}
 
 	@Override
