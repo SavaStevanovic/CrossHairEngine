@@ -17,7 +17,7 @@ public class Player implements TileObject {
 		this.y = y;
 		this.field = field;
 		this.move = new Move(Direction.CENTER);
-		this.messageHandler=messageHandler;
+		this.messageHandler = messageHandler;
 		field.addPlayer(this);
 	}
 
@@ -28,6 +28,8 @@ public class Player implements TileObject {
 
 	public void mObject() {
 		move.execute();
+		this.x += move.getDirection().getX();
+		this.y += move.getDirection().getY();
 	}
 
 	public int getX() {
@@ -120,11 +122,18 @@ public class Player implements TileObject {
 	}
 
 	public void fire() {
-		ExecutorManager.schedule(new Bullet(this.getAddress(), field, x, y, move, 5));
+		Direction bulletDirection = this.getMove().getDirection();
+		ExecutorManager.getInstance().schedule(
+				new Bullet(this.getAddress(), field, x + bulletDirection.getX(), y + bulletDirection.getY(), move, 5), 0, TimeUnit.MILLISECONDS);
 	}
 
 	@Override
 	public void destroy() {
 		field.removePlayer(this.getAddress());
+	}
+
+	@Override
+	public String getID() {
+		return messageHandler.socket.getInetAddress().toString();
 	}
 }

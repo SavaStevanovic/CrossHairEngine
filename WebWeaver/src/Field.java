@@ -33,6 +33,10 @@ public class Field {
 	public boolean containsPlayer(InetAddress inetAddress) {
 		return tileObjects.containsKey(inetAddress);
 	}
+	
+	public void removeTileObject(int x,int y){
+		field[x][y].setFObject(null);
+	}
 
 	public TileObject getTileObject(String tileObjectId) {
 		return tileObjects.get(tileObjectId);
@@ -58,16 +62,22 @@ public class Field {
 	public void moveFObject(TileObject fObject) {
 		field[fObject.getX()][fObject.getY()].free();
 		fObject.mObject();
+		TileObject obsticle=field[fObject.getX()][fObject.getY()].getFObject();
+		if(obsticle!=null){
+			fObject.destroy();
+			obsticle.destroy();
+			return;
+		}
 		field[fObject.getX()][fObject.getY()].setFObject(fObject);
 	}
 
 	public boolean freeToMove(Player player, Direction direction) {
 		Tile tile = field[player.getX() + direction.getX()][player.getY() + direction.getY()];
-		return tile.getFObject() == player || (tile.getFObject() == null && !tile.isReserved());
+		return (tile.isReserved().equals(player.getID())) || (tile.getFObject() == null && tile.isReserved().isEmpty());
 	}
 
-	public void reserveTile(Player player, Direction direction) {
-		Tile tile = field[player.getX() + direction.getX()][player.getY() + direction.getY()];
-		tile.reserve();
+	public void reserveTile(TileObject tileObject, Direction direction) {
+		Tile tile = field[tileObject.getX() + direction.getX()][tileObject.getY() + direction.getY()];
+		tile.reserve(tileObject);
 	}
 }

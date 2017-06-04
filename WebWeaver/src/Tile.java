@@ -3,20 +3,20 @@ import com.google.gson.JsonObject;
 public class Tile {
 	private long type;
 	private TileObject fObject;
-	private boolean reserve;
+	private String reserve;
 
 	public Tile(int type) {
 		this.type = type;
-		reserve = false;
+		reserve = "";
 	}
 
-	public void reserve() {
-		reserve = true;
+	public void reserve(TileObject tileObject) {
+		reserve = tileObject.getID();
 	}
 
 	public void free() {
 		fObject = null;
-		reserve = false;
+		reserve = "";
 	}
 
 	public void setFObject(TileObject fObject) {
@@ -31,7 +31,7 @@ public class Tile {
 		return fObject;
 	}
 
-	public boolean isReserved() {
+	public String isReserved() {
 		return reserve;
 	}
 }

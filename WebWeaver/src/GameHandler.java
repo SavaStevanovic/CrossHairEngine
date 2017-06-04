@@ -33,7 +33,7 @@ public class GameHandler {
 			field.addPlayer(new Player(messageHandler,field, randomGenerator.nextInt(Constants.FieldParams.fieldHeight),
 					randomGenerator.nextInt(Constants.FieldParams.fieldWidth)));
 		}
-		Player player=(Player) field.getTileObject(playerAddress.toString());
+		Player player = (Player) field.getTileObject(playerAddress.toString());
 		player.connect(messageHandler);
 		return player;
 	}

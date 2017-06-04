@@ -11,5 +11,6 @@ public class Constants {
 
 	public static class TileType {
 		public static final int grass = 0;
+		public static final int stone = 1;
 	}
 }

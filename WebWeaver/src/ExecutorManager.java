@@ -8,10 +8,6 @@ public final class ExecutorManager {
 		return executor;
 	}
 	
-	public static void schedule(Runnable runnable){
-		executor.schedule(runnable, 0, TimeUnit.MILLISECONDS);
-	}
-
 	private ExecutorManager() {
 	}
 }

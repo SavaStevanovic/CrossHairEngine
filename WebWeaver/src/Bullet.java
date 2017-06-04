@@ -1,6 +1,7 @@
 import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -35,11 +36,10 @@ public class Bullet implements TileObject, Runnable {
 		JsonObject json = new JsonObject();
 		json.addProperty("direction", move.getDirection().toString());
 		json.addProperty("startTime", time);
-		json.addProperty("startTime", time);
 		json.addProperty("active", active);
 		json.addProperty("executed", move.isExecuted());
 		json.addProperty("moveTime", Constants.FieldParams.baseTurnLength);
-		json.addProperty("type", "player");
+		json.addProperty("type", "bullet");
 		json.addProperty("x", x);
 		json.addProperty("y", y);
 		return json;
@@ -70,17 +70,22 @@ public class Bullet implements TileObject, Runnable {
 
 	@Override
 	public void run() {
+		travelDistance--;
+		if (travelDistance <= 0) {
+			destroy();
+			field.removeTileObject(this.getX(), this.getY());
+		}
 		if (!active) {
 			return;
 		}
-		ExecutorManager.schedule(this);
+		ExecutorManager.getInstance().schedule(this, Constants.FieldParams.baseTurnLength, TimeUnit.MILLISECONDS);
 		field.moveFObject(this);
 		Tile tile = field.getTile(x, y);
-		TileObject tileObject = tile.getFObject();
-		if (tileObject != null) {
+		/*TileObject tileObject = tile.getFObject();
+		if (tileObject != null && tileObject != this) {
 			tileObject.destroy();
 			this.destroy();
-		}
+		}*/
 		sync();
 	}
 
@@ -92,15 +97,21 @@ public class Bullet implements TileObject, Runnable {
 			for (int j = initY; j < initY + Constants.FieldParams.fieldViewWidth; j++) {
 				Tile tile = field.getTile(i, j);
 				TileObject fObject = tile.getFObject();
-				if (fObject != null) {
-					fObject.sync();
-				}
+				if (fObject != null)
+					if (fObject instanceof Player) {
+						fObject.sync();
+					}
 			}
 	}
 
 	@Override
 	public void destroy() {
 		active = false;
+	}
+
+	@Override
+	public String getID() {
+		return bulletID;
 	}
 
 }
