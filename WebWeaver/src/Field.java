@@ -14,6 +14,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 public class Field {
 	private Tile[][] field;
 	private Random rand = new Random();
+	private Tile_factory tileFactory=new Tile_factory();
 	private HashMap<String, TileObject> tileObjects;
 
 	public Field() {
@@ -26,7 +27,7 @@ public class Field {
 	private void InitField() {
 		for (int i = 0; i < Constants.FieldParams.fieldHeight; i++)
 			for (int j = 0; j < Constants.FieldParams.fieldWidth; j++) {
-				field[i][j] = new Tile(Constants.TileType.grass + rand.nextInt(Constants.FieldParams.fieldTypes));
+				field[i][j] = tileFactory.getTile(rand.nextInt(Constants.FieldParams.fieldTypes));
 			}
 	}
 
@@ -71,9 +72,15 @@ public class Field {
 		field[fObject.getX()][fObject.getY()].setFObject(fObject);
 	}
 
-	public boolean freeToMove(Player player, Direction direction) {
-		Tile tile = field[player.getX() + direction.getX()][player.getY() + direction.getY()];
-		return (tile.isReserved().equals(player.getID())) || (tile.getFObject() == null && tile.isReserved().isEmpty());
+	public boolean freeToMove(TileObject fObject, Direction direction) {
+		Direction moveDirection=fObject.getMove().getDirection();
+		Tile startTile=field[fObject.getX()][fObject.getY()];
+		Tile destinationTile=field[fObject.getX()+moveDirection.getX()][fObject.getY()+moveDirection.getY()];
+		if(!startTile.canMoveFrom(moveDirection) || !destinationTile.canMoveTo(direction)){
+			return false;
+		}
+		Tile tile = field[fObject.getX() + direction.getX()][fObject.getY() + direction.getY()];
+		return (tile.isReserved().equals(fObject.getID())) || (tile.getFObject() == null && tile.isReserved().isEmpty());
 	}
 
 	public void reserveTile(TileObject tileObject, Direction direction) {
