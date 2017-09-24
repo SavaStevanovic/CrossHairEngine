@@ -22,14 +22,14 @@ public class MapStateObject extends StateObject {
         horizontalOffset.put("up",0);
         horizontalOffset.put("right",1);
         horizontalOffset.put("bottom",0);
-        horizontalOffset.put("central",0);
+        horizontalOffset.put("center",0);
 
         // vertical initialization
         verticalOffset.put("left", 0);
         verticalOffset.put("up", -1);
         verticalOffset.put("right",0);
         verticalOffset.put("bottom",1);
-        verticalOffset.put("central",0);
+        verticalOffset.put("center",0);
     }
 
     public MapStateObject(String sActionName, int timeSinceBeginingOfTheAction) {
