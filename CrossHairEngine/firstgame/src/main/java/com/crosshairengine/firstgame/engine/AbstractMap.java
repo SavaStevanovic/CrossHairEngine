@@ -33,8 +33,8 @@ public abstract class AbstractMap extends CDrawable {
             this.height = this.height + 1;
         }
 
-        m_alTiles = new ArrayList<Tile>(width * height);
-        for(int i = 0; i< width * height; i++)
+        m_alTiles = new ArrayList<Tile>(this.width * this.height);
+        for(int i = 0; i< this.width * this.height; i++)
             m_alTiles.add(null);
     }
 

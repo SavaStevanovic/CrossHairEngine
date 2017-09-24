@@ -9,7 +9,7 @@ import java.net.Socket;
  */
 
 public class FlyInit extends Thread {
-    private String hostName = "192.168.0.106";
+    private String hostName = "192.168.0.103";
     private int portNumber = 4321;
     private Socket socket;
 

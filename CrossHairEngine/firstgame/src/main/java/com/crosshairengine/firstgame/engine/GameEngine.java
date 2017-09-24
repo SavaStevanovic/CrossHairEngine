@@ -7,12 +7,14 @@ import com.crosshairengine.firstgame.wolf_lair.Players.Player;
 import com.crosshairengine.firstgame.wolf_lair.WebWeaverProcessor;
 
 import java.util.ArrayList;
+import java.util.concurrent.Semaphore;
 
 /**
  * Created by NikolaRancic on 5/21/2017.
  */
 
 public class GameEngine extends  Thread{
+
     private long m_lTickLength;
     private boolean m_bRunTheGame;
     public MainDrawingClass m_MainDrawClass;
@@ -21,9 +23,9 @@ public class GameEngine extends  Thread{
     //
     public ArrayList<Player> m_alPlayer;
 
-    public GameEngine(Context mainActivity)
+    public GameEngine(Context mainActivity, Semaphore semProcessServerMessage)
     {
-        m_MainDrawClass = MainDrawingClass.getInstance(mainActivity);
+        m_MainDrawClass = MainDrawingClass.getInstance(mainActivity, semProcessServerMessage);
         m_lTickLength = 100;
         m_bRunTheGame = true;
         m_alPlayer = new ArrayList<Player>();
@@ -35,7 +37,6 @@ public class GameEngine extends  Thread{
         while (m_bRunTheGame)
         {
             m_MainDrawClass.postInvalidate();
-
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {

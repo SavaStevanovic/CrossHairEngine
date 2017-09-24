@@ -21,21 +21,21 @@ public class MapStateObject extends StateObject {
         horizontalOffset.put("left", -1);
         horizontalOffset.put("up",0);
         horizontalOffset.put("right",1);
-        horizontalOffset.put("bottom",0);
+        horizontalOffset.put("down",0);
         horizontalOffset.put("center",0);
 
         // vertical initialization
         verticalOffset.put("left", 0);
         verticalOffset.put("up", -1);
         verticalOffset.put("right",0);
-        verticalOffset.put("bottom",1);
+        verticalOffset.put("down",1);
         verticalOffset.put("center",0);
     }
 
-    public MapStateObject(String sActionName, int timeSinceBeginingOfTheAction) {
+    public MapStateObject(String sActionName, int timeActionProgressBeforeObjectCreation) {
         super();
         this.sActionName = sActionName;
-        this.timeActionProgressBeforeObjectCreation = timeSinceBeginingOfTheAction;
+        this.timeActionProgressBeforeObjectCreation = timeActionProgressBeforeObjectCreation;
         this.leftOffSet = horizontalOffset.get(this.sActionName) * (TimeALL() / 500) * Constants.width;
         this.topOffSet = verticalOffset.get(this.sActionName) * (TimeALL() / 500) * Constants.height;
     }

@@ -38,18 +38,21 @@ public class WebWeaverProcessor implements WebProcess {
 
 
         //Initialize map
-        Map newMap = new Map(result.getAsJsonObject("Player").get("direction").getAsString(),
-                result.getAsJsonObject("Player").get("startTime").getAsInt(),
+        String sDirection = result.getAsJsonObject("Player").get("direction").getAsString();
+        int iStartTime = result.getAsJsonObject("Player").get("startTime").getAsInt();
+        Map newMap = new Map(sDirection,
+                iStartTime,
                 Constants.width,
                 Constants.height);
 
-        synchronized (m_gameEngine.m_MainDrawClass) {
+        //synchronized (m_gameEngine.m_MainDrawClass) {
             for (int i = 0; i < stringArray.length; i++) {
                 //this is bad we use twice i, i will change this
                 //
                 newMap.setTile(tile_factory.getTile(Integer.parseInt(stringArray[i]), i), i);
             }
             m_gameEngine.clearPlayers();
+            m_gameEngine.m_MainDrawClass.clearCDrawableObjectStorage();
             JsonObject jsonPlayer = result.getAsJsonObject("Player");
             int x = jsonPlayer.get("x").getAsInt() - 7;
             int y = jsonPlayer.get("y").getAsInt() - 4;
@@ -69,7 +72,7 @@ public class WebWeaverProcessor implements WebProcess {
             //m_gameEngine.m_MainDrawClass.postInvalidate();
             number++;
             Log.i("process", "Iteration number: " + number.toString());
-        }
+        //}
 
     }
 }

@@ -19,8 +19,11 @@ import com.crosshairengine.firstgame.wolf_lair.Settings.Constants;
 import com.crosshairengine.firstgame.wolf_lair.Settings.FlyInit;
 
 import java.net.Socket;
+import java.util.concurrent.Semaphore;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Semaphore semProcessServerMessage = new Semaphore(1, true);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.content_main);
-        GameEngine main = new GameEngine(this);
+        GameEngine main = new GameEngine(this, semProcessServerMessage);
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.overlay);
         layout.addView(main.m_MainDrawClass, 0);
 
@@ -61,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         Player_Factory.getInstance(this,Constants.height, Constants.width);
         Tile_Factory.getInstance(this,Constants.height, Constants.width);
 
-        new FlyClientReceiver(Constants.onlySocket, new WebWeaverProcessor(main)).start();
+        new FlyClientReceiver(Constants.onlySocket, new WebWeaverProcessor(main), semProcessServerMessage).start();
         main.start();
 
     }

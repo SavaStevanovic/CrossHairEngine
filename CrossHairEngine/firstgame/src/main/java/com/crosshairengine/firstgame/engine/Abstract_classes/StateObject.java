@@ -19,14 +19,13 @@ public class StateObject {
 
     public StateObject() {
         this.m_bitmap = null;
+
         this.sActionName = null;
         this.timeActionProgressBeforeObjectCreation = 0;
-    }
-
-    public StateObject(String sActionName, int timeActionProgressBeforeObjectCreation) {
-        this.sActionName = sActionName;
-        this.timeActionProgressBeforeObjectCreation = timeActionProgressBeforeObjectCreation;
         this.timeCreationOfObject = new Date().getTime();
+
+        this.leftOffSet = 0;
+        this.topOffSet = 0;
     }
 
     public void Invalidate(){}
