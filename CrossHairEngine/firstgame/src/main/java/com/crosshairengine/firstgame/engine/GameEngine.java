@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 
 import com.crosshairengine.firstgame.wolf_lair.Players.Player;
+import com.crosshairengine.firstgame.wolf_lair.WebWeaverProcessor;
 
 import java.util.ArrayList;
 
@@ -11,36 +12,41 @@ import java.util.ArrayList;
  * Created by NikolaRancic on 5/21/2017.
  */
 
-public class GameEngine {
+public class GameEngine extends  Thread{
     private long m_lTickLength;
     private boolean m_bRunTheGame;
-    public Map m_mMap;
     public MainDrawingClass m_MainDrawClass;
-
+    public WebWeaverProcessor m_wwp;
     //not should be done like this, will change
     //
     public ArrayList<Player> m_alPlayer;
 
-    public GameEngine(Context mainActivity, int width, int height)
+    public GameEngine(Context mainActivity)
     {
-        m_mMap = new Map(width, height);
         m_MainDrawClass = MainDrawingClass.getInstance(mainActivity);
-        m_lTickLength = (1000)/60;
+        m_lTickLength = 100;
         m_bRunTheGame = true;
         m_alPlayer = new ArrayList<Player>();
     }
 
-    public void StartGame() 
-    {
+    @Override
+    public void run() {
         long processedTime = GetCurrentTimeInMillis();
         while (m_bRunTheGame)
         {
-            DrawFrame();
-            while ((processedTime + m_lTickLength) < GetCurrentTimeInMillis())
-            {
-                UpdateGame();
-                processedTime +=m_lTickLength;
-            }
+            m_MainDrawClass.postInvalidate();
+
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+        }
+        //DrawFrame();
+//            while ((processedTime + m_lTickLength) < GetCurrentTimeInMillis())
+//            {
+//                UpdateGame();
+//                processedTime +=m_lTickLength;
+//            }
 
         }
     }
@@ -52,7 +58,9 @@ public class GameEngine {
 
     public void DrawFrame()
     {
-
+       //synchronized (m_MainDrawClass) {
+            m_MainDrawClass.postInvalidate();
+       //}
     }
 
     private long GetCurrentTimeInMillis()
@@ -72,4 +80,6 @@ public class GameEngine {
     public void drawPicture() {
         m_MainDrawClass.postInvalidate();
     }
+
+
 }

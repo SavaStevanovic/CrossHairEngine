@@ -22,6 +22,7 @@ import static android.graphics.BitmapFactory.decodeResource;
 
 public class Tile_Factory {
     private static Tile_Factory _instance;
+
     public static Tile_Factory getInstance(Context context, int height_count, int weight_count)
     {
         if (_instance == null)
@@ -37,8 +38,8 @@ public class Tile_Factory {
     }
 
     private HashMap<Integer, Bitmap> bitmap_originals;
-    private int height;
-    private int width;
+    private int heightPx;
+    private int widthPx;
     private int height_count;
     private int width_count;
 
@@ -61,11 +62,11 @@ public class Tile_Factory {
         this.height_count = height_count;
         this.width_count = weight_count;
         bitmap_originals = new HashMap<Integer, Bitmap>();
-        height = PhoneSettings.getInstance().getHeight();
-        width = PhoneSettings.getInstance().getWeight();
+        heightPx = PhoneSettings.getInstance().getHeight();
+        widthPx = PhoneSettings.getInstance().getWeight();
         for (Tile_type tile_type: Tile_type.values()) {
             Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), tile_type.getValue());
-            bmp=Bitmap.createScaledBitmap(bmp,  width / weight_count-1, height / height_count - 1, false);
+            bmp=Bitmap.createScaledBitmap(bmp,  widthPx / weight_count-1, heightPx / height_count - 1, false);
             bitmap_originals.put(tile_type.getValue(), bmp);
         }
 
@@ -73,19 +74,19 @@ public class Tile_Factory {
 
     public Tile getTile(int val, int i) {
         Tile_type key = Tile_Factory.Tile_type.values()[val];
-        int x = i / height_count;
-        int y = i % width;
+        int left = i % width_count;
+        int top = i / width_count;
 
         Bitmap bmp = bitmap_originals.get(key.getValue());
-        int posX = x * height / height_count;
-        int posY = y * width / width_count;
+        int leftPx = left * widthPx / width_count;
+        int topPx = top * heightPx / height_count;
         Tile tile=null;
         switch (key) {
             case GRASS:
-                tile= new Tile_grass(bmp, posX, posY);
+                tile= new Tile_grass(bmp, leftPx, topPx);
                 break;
             case STONE:
-                tile= new Tile_stone(bmp, posX, posY);
+                tile= new Tile_stone(bmp, leftPx, topPx);
                 break;
         }
         return tile;

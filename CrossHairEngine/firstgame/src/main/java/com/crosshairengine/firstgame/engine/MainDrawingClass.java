@@ -2,6 +2,7 @@ package com.crosshairengine.firstgame.engine;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.View;
 
 import com.crosshairengine.firstgame.engine.Abstract_classes.CDrawable;
@@ -27,46 +28,42 @@ public class MainDrawingClass extends View {
     //
     private ArrayList<ArrayList<CDrawable>> m_alDrawableObjects;
 
-    public void addCDrawableArrayList(int drawingLevel, ArrayList<CDrawable> al)
-    {
+    public void addCDrawableArrayList(int drawingLevel, ArrayList<CDrawable> al) {
         m_alDrawableObjects.add(drawingLevel, al);
     }
 
-    public void clearCDrawableObjectStorage()
-    {
-        m_alDrawableObjects = new ArrayList<ArrayList<CDrawable>>(5);
+    public void clearCDrawableObjectStorage() {
+        m_alDrawableObjects = new ArrayList<ArrayList<CDrawable>>();
     }
 
-    public ArrayList<ArrayList<CDrawable>> getAllDrawableObjects()
-    {
+    public ArrayList<ArrayList<CDrawable>> getAllDrawableObjects() {
         return m_alDrawableObjects;
     }
     //**********************************
 
     private static MainDrawingClass _instance = null;
-    private MainDrawingClass(Context context)
-    {
+
+    private MainDrawingClass(Context context) {
         super(context);
-        m_alDrawableObjects = new ArrayList<ArrayList<CDrawable>>(5);
+        //setWillNotDraw(false);
+        m_alDrawableObjects = new ArrayList<ArrayList<CDrawable>>();
     }
 
 
-    public static MainDrawingClass getInstance(Context context){
+    public static synchronized MainDrawingClass getInstance(Context context) {
         if (_instance == null)
             _instance = new MainDrawingClass(context);
         return _instance;
     }
 
-    public void DrawAll(Canvas canvas)
+    @Override
+    public void onDraw(Canvas canvas)
     {
+        super.onDraw(canvas);
         for(ArrayList<CDrawable> iteratorList :m_alDrawableObjects)
             for(CDrawable iteratorDrawable : iteratorList)
                 iteratorDrawable.Draw(canvas);
-    }
-
-    @Override
-    public void onDraw(Canvas canvas) {
-        DrawAll(canvas);
+        System.out.println("onDraw" + "entered onDraw method");
     }
 
 }

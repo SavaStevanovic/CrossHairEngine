@@ -12,20 +12,33 @@ import java.util.ArrayList;
  * this is client's map (it's more a as a composite for tiles)
  */
 
-public class Map extends CDrawable {
-    private ArrayList<Tile> m_alTiles;
-    private int width;
-    private int height;
+public abstract class AbstractMap extends CDrawable {
+    protected ArrayList<Tile> m_alTiles;
+    protected int width;
+    protected int height;
 
-    public Map(int width, int height)
+    public AbstractMap(String sDirection, int width, int height)
     {
         super();
+
         this.width = width;
         this.height = height;
+
+        if (sDirection.equals("left") || sDirection.equals("right"))
+        {
+            this.width = this.width + 1;
+        }
+        else if (sDirection.equals("down") || sDirection.equals("up"))
+        {
+            this.height = this.height + 1;
+        }
+
         m_alTiles = new ArrayList<Tile>(width * height);
+        for(int i = 0; i< width * height; i++)
+            m_alTiles.add(null);
     }
 
-    public Map(ArrayList<Tile> al)
+    public AbstractMap(ArrayList<Tile> al)
     {
         m_alTiles = al;
     }
@@ -41,10 +54,10 @@ public class Map extends CDrawable {
         return m_alTiles.get(positionInArray);
     }
 
-    public void Draw(Canvas canvas)
+    public void Draw(Canvas canvas, int leftOffSet, int topOffSet)
     {
         for (Tile tile : m_alTiles)
-            tile.Draw(canvas);
+            tile.Draw(canvas, leftOffSet, topOffSet);
     }
 
 }

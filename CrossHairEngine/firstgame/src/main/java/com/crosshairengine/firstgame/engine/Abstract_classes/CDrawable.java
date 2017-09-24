@@ -15,13 +15,20 @@ public abstract class CDrawable {
 
     public CDrawable(){}
 
-    public CDrawable(Bitmap bitmap,int left, int top)
+    public CDrawable(Bitmap bitmap,int leftPx, int topPx)
     {
         m_bSprate = bitmap;
-        this.topPx = top;
-        this.leftPx = left;
+        this.topPx = topPx;
+        this.leftPx = leftPx;
     }
 
-    public void Draw(Canvas canvas){ canvas.drawBitmap(m_bSprate, leftPx, topPx, null);}
+    public void Draw(Canvas canvas, int leftOffSet, int topOffSet)
+    {
+        canvas.drawBitmap(m_bSprate, leftPx + leftOffSet, topPx + topOffSet, null);
+    }
 
+    public void Draw(Canvas canvas)
+    {
+        Draw(canvas, 0, 0);
+    }
 }
