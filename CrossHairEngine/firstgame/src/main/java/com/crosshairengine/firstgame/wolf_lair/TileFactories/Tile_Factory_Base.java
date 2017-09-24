@@ -1,4 +1,4 @@
-package com.crosshairengine.firstgame.wolf_lair;
+package com.crosshairengine.firstgame.wolf_lair.TileFactories;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,39 +12,24 @@ import com.crosshairengine.firstgame.wolf_lair.Tiles.Tile_stone;
 
 import java.util.HashMap;
 
-import static android.R.attr.id;
-import static android.R.attr.type;
 import static android.graphics.BitmapFactory.decodeResource;
 
 /**
  * Created by CrossHairEngine team on 5/2/2017.
  */
 
-public class Tile_Factory {
-    private static Tile_Factory _instance;
+public abstract class Tile_Factory_Base {
 
     private static int tileWidth;
     private static int tileHeight;
 
-    public static Tile_Factory getInstance(Context context, int height_count, int weight_count)
-    {
-        if (_instance == null)
-            _instance = new Tile_Factory(context, height_count, weight_count);
-        return _instance;
-    }
+    private int offsetForTesting = -1;
 
-    //you use this when you are sure that _instance is not null!
-    //
-    public static Tile_Factory getInstance()
-    {
-        return _instance;
-    }
-
-    private HashMap<Integer, Bitmap> bitmap_originals;
-    private int heightPx;
-    private int widthPx;
-    private int height_count;
-    private int width_count;
+    protected HashMap<Integer, Bitmap> bitmap_originals;
+    protected int heightPx;
+    protected int widthPx;
+    protected int height_count;
+    protected int width_count;
 
     public static enum Tile_type {
         GRASS(R.drawable.tile_grass ),
@@ -61,7 +46,7 @@ public class Tile_Factory {
         }
     }
 
-    private Tile_Factory(Context context, int height_count, int weight_count) {
+    protected Tile_Factory_Base(Context context, int height_count, int weight_count) {
 
         //initialize object attributes
         this.height_count = height_count;
@@ -71,12 +56,12 @@ public class Tile_Factory {
         this.widthPx = PhoneSettings.getInstance().getWeight();
 
         // static tile width and height
-        tileWidth = widthPx / weight_count - 1;
-        tileHeight = heightPx / height_count - 1;
+        tileWidth = widthPx / weight_count;
+        tileHeight = heightPx / height_count;
 
         for (Tile_type tile_type: Tile_type.values()) {
             Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), tile_type.getValue());
-            bmp=Bitmap.createScaledBitmap(bmp,  tileWidth, tileHeight, false);
+            bmp=Bitmap.createScaledBitmap(bmp,  tileWidth + offsetForTesting, tileHeight + offsetForTesting, false);
             bitmap_originals.put(tile_type.getValue(), bmp);
         }
 
@@ -90,23 +75,6 @@ public class Tile_Factory {
         return tileHeight;
     }
 
-    public Tile getTile(int val, int i) {
-        Tile_type key = Tile_Factory.Tile_type.values()[val];
-        int left = i % width_count;
-        int top = i / width_count;
+    public abstract Tile getTile(int val, int i);
 
-        Bitmap bmp = bitmap_originals.get(key.getValue());
-        int leftPx = left * widthPx / width_count;
-        int topPx = top * heightPx / height_count;
-        Tile tile=null;
-        switch (key) {
-            case GRASS:
-                tile= new Tile_grass(bmp, leftPx, topPx);
-                break;
-            case STONE:
-                tile= new Tile_stone(bmp, leftPx, topPx);
-                break;
-        }
-        return tile;
-    }
 }

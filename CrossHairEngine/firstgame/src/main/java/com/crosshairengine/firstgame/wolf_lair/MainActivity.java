@@ -11,12 +11,12 @@ import android.widget.RelativeLayout;
 
 import com.crosshairengine.firstgame.R;
 import com.crosshairengine.firstgame.engine.Commands.Command;
-import com.crosshairengine.firstgame.engine.Direction;
 import com.crosshairengine.firstgame.engine.FlyClientWriter;
 import com.crosshairengine.firstgame.engine.FlyClientReceiver;
 import com.crosshairengine.firstgame.engine.GameEngine;
 import com.crosshairengine.firstgame.wolf_lair.Settings.Constants;
 import com.crosshairengine.firstgame.wolf_lair.Settings.FlyInit;
+import com.crosshairengine.firstgame.wolf_lair.TileFactories.Tile_Factory_Abstract_Factory;
 
 import java.net.Socket;
 import java.util.concurrent.Semaphore;
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         // Constructors
         //
         Player_Factory.getInstance(this,Constants.height, Constants.width);
-        Tile_Factory.getInstance(this,Constants.height, Constants.width);
+        Tile_Factory_Abstract_Factory.Initialize(this,Constants.height, Constants.width);
 
         new FlyClientReceiver(Constants.onlySocket, new WebWeaverProcessor(main), semProcessServerMessage).start();
         main.start();

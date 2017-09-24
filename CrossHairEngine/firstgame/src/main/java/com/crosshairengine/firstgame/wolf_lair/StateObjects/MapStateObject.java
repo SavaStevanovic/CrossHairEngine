@@ -1,11 +1,9 @@
 package com.crosshairengine.firstgame.wolf_lair.StateObjects;
 
-import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.crosshairengine.firstgame.engine.Abstract_classes.StateObject;
-import com.crosshairengine.firstgame.wolf_lair.Settings.Constants;
-import com.crosshairengine.firstgame.wolf_lair.Tile_Factory;
+import com.crosshairengine.firstgame.wolf_lair.TileFactories.Tile_Factory_Base;
 
 import java.util.HashMap;
 
@@ -15,23 +13,23 @@ import java.util.HashMap;
 
 public class MapStateObject extends StateObject {
 
-    private static HashMap<String, Integer> horizontalOffset = new HashMap<String, Integer>();
-    private static HashMap<String, Integer> verticalOffset = new HashMap<String, Integer>();
+    private static HashMap<String, Integer> horizontalOffsetMove = new HashMap<String, Integer>();
+    private static HashMap<String, Integer> verticalOffsetMove = new HashMap<String, Integer>();
 
     static {
-        // horizontal initialization
-        horizontalOffset.put("left", 1);
-        horizontalOffset.put("up",0);
-        horizontalOffset.put("right",-1);
-        horizontalOffset.put("down",0);
-        horizontalOffset.put("center",0);
+        // horizontal movement initialization
+        horizontalOffsetMove.put("left", 1);
+        horizontalOffsetMove.put("up",0);
+        horizontalOffsetMove.put("right",-1);
+        horizontalOffsetMove.put("down",0);
+        horizontalOffsetMove.put("center",0);
 
-        // vertical initialization
-        verticalOffset.put("left", 0);
-        verticalOffset.put("up", 1);
-        verticalOffset.put("right",0);
-        verticalOffset.put("down",-1);
-        verticalOffset.put("center",0);
+        // vertical movement initialization
+        verticalOffsetMove.put("left", 0);
+        verticalOffsetMove.put("up", 1);
+        verticalOffsetMove.put("right",0);
+        verticalOffsetMove.put("down",-1);
+        verticalOffsetMove.put("center",0);
     }
 
     public MapStateObject(String sActionName, int timeActionProgressBeforeObjectCreation) {
@@ -39,16 +37,25 @@ public class MapStateObject extends StateObject {
         this.sActionName = sActionName;
         double percentDone = TimeALL() / 500.0;
         this.timeActionProgressBeforeObjectCreation = timeActionProgressBeforeObjectCreation;
-        this.leftOffSet = horizontalOffset.get(this.sActionName) * (int)(percentDone * Constants.width);
-        this.topOffSet = verticalOffset.get(this.sActionName) * (int)(percentDone * Constants.height);
+
+        this.leftOffSet = horizontalOffsetMove.get(this.sActionName) * (int)(percentDone * Tile_Factory_Base.getTileWidth());
+        if (sActionName.equals("left")) this.leftOffSet -= Tile_Factory_Base.getTileWidth();
+
+        this.topOffSet = verticalOffsetMove.get(this.sActionName) * (int)(percentDone * Tile_Factory_Base.getTileHeight());
+        if (sActionName.equals("up")) this.topOffSet -= Tile_Factory_Base.getTileHeight();
     }
 
     @Override
     public void Invalidate(){
+
         double percentDone = TimeALL() / 500.0;
         Log.i("State INVALIDATE:", "TimeALL/500 = " + percentDone);
         if (percentDone > 1) percentDone = 1;
-        this.leftOffSet = horizontalOffset.get(this.sActionName) * (int)(percentDone * Tile_Factory.getTileWidth());
-        this.topOffSet = verticalOffset.get(this.sActionName) * (int)(percentDone * Tile_Factory.getTileHeight());
+
+        this.leftOffSet = horizontalOffsetMove.get(this.sActionName) * (int)(percentDone * Tile_Factory_Base.getTileWidth());
+        if (sActionName.equals("left")) this.leftOffSet -= Tile_Factory_Base.getTileWidth();
+
+        this.topOffSet = verticalOffsetMove.get(this.sActionName) * (int)(percentDone * Tile_Factory_Base.getTileHeight());
+        if (sActionName.equals("up")) this.topOffSet -= Tile_Factory_Base.getTileHeight();
     }
 }
