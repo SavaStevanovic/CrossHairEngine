@@ -23,6 +23,9 @@ import static android.graphics.BitmapFactory.decodeResource;
 public class Tile_Factory {
     private static Tile_Factory _instance;
 
+    private static int tileWidth;
+    private static int tileHeight;
+
     public static Tile_Factory getInstance(Context context, int height_count, int weight_count)
     {
         if (_instance == null)
@@ -59,17 +62,32 @@ public class Tile_Factory {
     }
 
     private Tile_Factory(Context context, int height_count, int weight_count) {
+
+        //initialize object attributes
         this.height_count = height_count;
         this.width_count = weight_count;
-        bitmap_originals = new HashMap<Integer, Bitmap>();
-        heightPx = PhoneSettings.getInstance().getHeight();
-        widthPx = PhoneSettings.getInstance().getWeight();
+        this.bitmap_originals = new HashMap<Integer, Bitmap>();
+        this.heightPx = PhoneSettings.getInstance().getHeight();
+        this.widthPx = PhoneSettings.getInstance().getWeight();
+
+        // static tile width and height
+        tileWidth = widthPx / weight_count - 1;
+        tileHeight = heightPx / height_count - 1;
+
         for (Tile_type tile_type: Tile_type.values()) {
             Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), tile_type.getValue());
-            bmp=Bitmap.createScaledBitmap(bmp,  widthPx / weight_count-1, heightPx / height_count - 1, false);
+            bmp=Bitmap.createScaledBitmap(bmp,  tileWidth, tileHeight, false);
             bitmap_originals.put(tile_type.getValue(), bmp);
         }
 
+    }
+
+    public static int getTileWidth() {
+        return tileWidth;
+    }
+
+    public static int getTileHeight() {
+        return tileHeight;
     }
 
     public Tile getTile(int val, int i) {

@@ -1,9 +1,11 @@
 package com.crosshairengine.firstgame.wolf_lair.StateObjects;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.crosshairengine.firstgame.engine.Abstract_classes.StateObject;
 import com.crosshairengine.firstgame.wolf_lair.Settings.Constants;
+import com.crosshairengine.firstgame.wolf_lair.Tile_Factory;
 
 import java.util.HashMap;
 
@@ -18,31 +20,35 @@ public class MapStateObject extends StateObject {
 
     static {
         // horizontal initialization
-        horizontalOffset.put("left", -1);
+        horizontalOffset.put("left", 1);
         horizontalOffset.put("up",0);
-        horizontalOffset.put("right",1);
+        horizontalOffset.put("right",-1);
         horizontalOffset.put("down",0);
         horizontalOffset.put("center",0);
 
         // vertical initialization
         verticalOffset.put("left", 0);
-        verticalOffset.put("up", -1);
+        verticalOffset.put("up", 1);
         verticalOffset.put("right",0);
-        verticalOffset.put("down",1);
+        verticalOffset.put("down",-1);
         verticalOffset.put("center",0);
     }
 
     public MapStateObject(String sActionName, int timeActionProgressBeforeObjectCreation) {
         super();
         this.sActionName = sActionName;
+        double percentDone = TimeALL() / 500.0;
         this.timeActionProgressBeforeObjectCreation = timeActionProgressBeforeObjectCreation;
-        this.leftOffSet = horizontalOffset.get(this.sActionName) * (TimeALL() / 500) * Constants.width;
-        this.topOffSet = verticalOffset.get(this.sActionName) * (TimeALL() / 500) * Constants.height;
+        this.leftOffSet = horizontalOffset.get(this.sActionName) * (int)(percentDone * Constants.width);
+        this.topOffSet = verticalOffset.get(this.sActionName) * (int)(percentDone * Constants.height);
     }
 
     @Override
     public void Invalidate(){
-        this.leftOffSet = horizontalOffset.get(this.sActionName) * (TimeALL() / 500) * Constants.width;
-        this.topOffSet = verticalOffset.get(this.sActionName) * (TimeALL() / 500) * Constants.height;
+        double percentDone = TimeALL() / 500.0;
+        Log.i("State INVALIDATE:", "TimeALL/500 = " + percentDone);
+        if (percentDone > 1) percentDone = 1;
+        this.leftOffSet = horizontalOffset.get(this.sActionName) * (int)(percentDone * Tile_Factory.getTileWidth());
+        this.topOffSet = verticalOffset.get(this.sActionName) * (int)(percentDone * Tile_Factory.getTileHeight());
     }
 }
