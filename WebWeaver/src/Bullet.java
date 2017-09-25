@@ -9,8 +9,9 @@ import com.google.gson.JsonObject;
 public class Bullet implements TileObject, Runnable {
 	private String bulletID;
 	private String playerAdress;
-	private int x, y;
 	private Field field;
+	private int x, y;
+	
 	private int travelDistance;
 	private Move move;
 	private boolean active;
@@ -80,22 +81,32 @@ public class Bullet implements TileObject, Runnable {
 		}
 		ExecutorManager.getInstance().schedule(this, Constants.FieldParams.baseTurnLength, TimeUnit.MILLISECONDS);
 		field.moveFObject(this);
-		Tile tile = field.getTile(x, y);
 		sync();
 	}
 
 	@Override
 	public void sync() {
-		int initX = getX() - Constants.FieldParams.fieldViewHeight / 2;
-		int initY = getY() - Constants.FieldParams.fieldViewWidth / 2;
-		for (int i = initX; i < initX + Constants.FieldParams.fieldViewHeight; i++)
-			for (int j = initY; j < initY + Constants.FieldParams.fieldViewWidth; j++) {
+		int xS = x;
+		int yS = y;
+		Direction direction = move.getDirection();
+		if (move.isExecuted()) {
+			xS -= direction.getX();
+			yS -= direction.getY();
+		}
+		int heighOffset = direction.getX();
+		int widthOffset = direction.getY();
+		int height = Constants.FieldParams.fieldViewHeight;
+		int width = Constants.FieldParams.fieldViewWidth;
+		int initX = xS - height / 2 + heighOffset;
+		int initY = yS - width / 2 + widthOffset;
+		for (int i = initX; i < initX + height  + Math.abs(heighOffset); i++)
+			for (int j = initY; j < initY + width  + Math.abs(widthOffset); j++) {
 				Tile tile = field.getTile(i, j);
 				TileObject fObject = tile.getFObject();
 				if (fObject != null)
-					if (fObject instanceof Player) {
-						fObject.sync();
-					}
+				{
+					fObject.Info();
+				}
 			}
 	}
 
@@ -107,6 +118,11 @@ public class Bullet implements TileObject, Runnable {
 	@Override
 	public String getID() {
 		return bulletID;
+	}
+
+	@Override
+	public Field getField() {
+		return field;
 	}
 
 }

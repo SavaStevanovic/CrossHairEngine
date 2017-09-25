@@ -23,7 +23,7 @@ public class Player implements TileObject {
 
 	public void connect(MessageHandler messageHandeler) {
 		this.messageHandler = messageHandeler;
-		this.PlayerInfo();
+		this.sync();
 	}
 
 	public void mObject() {
@@ -65,7 +65,13 @@ public class Player implements TileObject {
 		JsonProccessor.proccess(this, json);
 	}
 
-	public void PlayerInfo() {
+	@Override
+	public void Info() {
+		if (new Date().getTime() - this.move.getMoveStart() > Constants.FieldParams.baseTurnLength) {
+			if (!this.move.isExecuted()) {
+				field.moveFObject(this);
+			}
+		}
 		int xS = x;
 		int yS = y;
 		Direction direction = move.getDirection();
@@ -81,8 +87,8 @@ public class Player implements TileObject {
 		int initY = yS - width / 2 + widthOffset;
 		StringBuilder retTiles = new StringBuilder();
 		JsonArray retObjects = new JsonArray();
-		for (int i = initX; i < initX + height  + Math.abs(heighOffset); i++)
-			for (int j = initY; j < initY + width  + Math.abs(widthOffset); j++) {
+		for (int i = initX; i < initX + height + Math.abs(heighOffset); i++)
+			for (int j = initY; j < initY + width + Math.abs(widthOffset); j++) {
 				Tile tile = field.getTile(i, j);
 				retTiles.append(Long.toString(tile.getType())).append(",");
 				TileObject fObject = tile.getFObject();
@@ -102,12 +108,28 @@ public class Player implements TileObject {
 	}
 
 	public void sync() {
-		if (new Date().getTime() - this.move.getMoveStart() > Constants.FieldParams.baseTurnLength) {
-			if (!this.move.isExecuted()) {
-				field.moveFObject(this);
-			}
+		int xS = x;
+		int yS = y;
+		Direction direction = move.getDirection();
+		if (move.isExecuted()) {
+			xS -= direction.getX();
+			yS -= direction.getY();
 		}
-		PlayerInfo();
+		int heighOffset = direction.getX();
+		int widthOffset = direction.getY();
+		int height = Constants.FieldParams.fieldViewHeight;
+		int width = Constants.FieldParams.fieldViewWidth;
+		int initX = xS - height / 2 + heighOffset;
+		int initY = yS - width / 2 + widthOffset;
+		for (int i = initX; i < initX + height  + Math.abs(heighOffset); i++)
+			for (int j = initY; j < initY + width  + Math.abs(widthOffset); j++) {
+				Tile tile = field.getTile(i, j);
+				TileObject fObject = tile.getFObject();
+				if (fObject != null)
+				{
+					fObject.Info();
+				}
+			}
 	}
 
 	public void Move(Direction direction) {
@@ -119,7 +141,7 @@ public class Player implements TileObject {
 			field.reserveTile(this, direction);
 			this.move = new Move(direction);
 		}
-		PlayerInfo();
+		sync();
 	}
 
 	public String getAddress() {
@@ -154,5 +176,10 @@ public class Player implements TileObject {
 	@Override
 	public String getID() {
 		return messageHandler.socket.getInetAddress().toString();
+	}
+
+	@Override
+	public Field getField() {
+		return field;
 	}
 }

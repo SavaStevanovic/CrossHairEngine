@@ -9,11 +9,40 @@ public interface TileObject {
 	
 	public int getY();
 	
+	public Field getField();
+	
 	public Move getMove();
 	
 	public void mObject();
 
-	public void sync();
+	public default void sync() {
+		int xS = getX();
+		int yS = getY();
+		Move move=getMove();
+		Direction direction = move.getDirection();
+		if (move.isExecuted()) {
+			xS -= direction.getX();
+			yS -= direction.getY();
+		}
+		Field field=getField();
+		int heighOffset = direction.getX();
+		int widthOffset = direction.getY();
+		int height = Constants.FieldParams.fieldViewHeight;
+		int width = Constants.FieldParams.fieldViewWidth;
+		int initX = xS - height / 2 + heighOffset;
+		int initY = yS - width / 2 + widthOffset;
+		for (int i = initX; i < initX + height  + Math.abs(heighOffset); i++)
+			for (int j = initY; j < initY + width  + Math.abs(widthOffset); j++) {
+				Tile tile = field.getTile(i, j);
+				TileObject fObject = tile.getFObject();
+				if (fObject != null)
+				{
+					fObject.Info();
+				}
+			}
+	}
+	
+	public default void Info(){};
 	
 	public void destroy();
 }
