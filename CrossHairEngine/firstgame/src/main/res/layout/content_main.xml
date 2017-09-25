@@ -18,8 +18,8 @@
 
     <RelativeLayout
         android:id="@+id/underlay"
-        android:layout_width="576dp"
-        android:layout_height="343dp"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
         android:gravity="center"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -31,10 +31,8 @@
             android:layout_height="60dp"
             android:background="@drawable/direction_up"
             android:clickable="true"
-            android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/ImageButtonLeft"
-            android:layout_toEndOf="@+id/ImageButtonLeft"
-            android:layout_marginTop="111dp"></Button>
+            android:layout_toEndOf="@+id/ImageButtonLeft"></Button>
         <Button
             android:id="@+id/ImageButtonLeft"
             android:layout_width="60dp"
