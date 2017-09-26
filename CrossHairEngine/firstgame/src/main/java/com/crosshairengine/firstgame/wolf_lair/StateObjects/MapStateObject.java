@@ -32,11 +32,10 @@ public class MapStateObject extends StateObject {
         verticalOffsetMove.put("center",0);
     }
 
-    public MapStateObject(String sActionName, int timeActionProgressBeforeObjectCreation) {
-        super();
-        this.sActionName = sActionName;
-        double percentDone = TimeALL() / 500.0;
-        this.timeActionProgressBeforeObjectCreation = timeActionProgressBeforeObjectCreation;
+    public MapStateObject(String sActionName, int timeActionProgressBeforeObjectCreation, int timeLengthOfAction) {
+        super(null, sActionName, timeActionProgressBeforeObjectCreation, timeLengthOfAction);
+
+        double percentDone = TimeALL() / (double) this.timeLengthOfAction;
 
         this.leftOffSet = horizontalOffsetMove.get(this.sActionName) * (int)(percentDone * Tile_Factory_Base.getTileWidth());
         if (sActionName.equals("left")) this.leftOffSet -= Tile_Factory_Base.getTileWidth();
@@ -48,7 +47,7 @@ public class MapStateObject extends StateObject {
     @Override
     public void Invalidate(){
 
-        double percentDone = TimeALL() / 500.0;
+        double percentDone = TimeALL() / (double) this.timeLengthOfAction;
         Log.i("State INVALIDATE:", "TimeALL/500 = " + percentDone);
         if (percentDone > 1) percentDone = 1;
 

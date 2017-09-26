@@ -37,10 +37,12 @@ public class WebWeaverProcessor implements WebProcess {
         //Initialize map
         String sDirection = result.getAsJsonObject("Player").get("direction").getAsString();
         int iStartTime = result.getAsJsonObject("Player").get("startTime").getAsInt();
-        String[] stringArray = result.get("Tiles").getAsString().split(",");
+        int iActionTime = result.getAsJsonObject("Player").get("moveTime").getAsInt();
+        String[] sTilesArray = result.get("Tiles").getAsString().split(",");
         Map newMap = new Map(sDirection,
+                sTilesArray,
                 iStartTime,
-                result.get("Tiles").getAsString().split(","),
+                iActionTime,
                 Constants.width,
                 Constants.height);
 

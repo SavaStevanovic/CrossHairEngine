@@ -18,8 +18,9 @@ public class Map extends AbstractMap {
     public StateObject m_state;
 
     public Map(String sDirection,
-               int timeSinceBeginingOfTheAction,
                String[] stringArray,
+               int timeSinceBeginingOfTheAction,
+               int timeLengthOfAction,
                int width,
                int height)
     {
@@ -30,7 +31,7 @@ public class Map extends AbstractMap {
             //
             this.setTile(Tile_Factory_Abstract_Factory.GetFactory(sDirection).getTile(Integer.parseInt(stringArray[i]), i), i);
         }
-        m_state = new MapStateObject(sDirection, timeSinceBeginingOfTheAction);
+        m_state = new MapStateObject(sDirection, timeSinceBeginingOfTheAction, timeLengthOfAction);
     }
 
     @Override
