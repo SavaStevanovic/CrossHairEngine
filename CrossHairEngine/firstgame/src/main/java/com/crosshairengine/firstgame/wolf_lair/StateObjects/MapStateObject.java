@@ -48,7 +48,7 @@ public class MapStateObject extends StateObject {
     public void Invalidate(){
 
         double percentDone = TimeALL() / (double) this.timeLengthOfAction;
-        Log.i("State INVALIDATE:", "TimeALL/500 = " + percentDone);
+        Log.i("State INVALIDATE:", "TimeALL/this.timeLengthOfAction = " + percentDone);
         if (percentDone > 1) percentDone = 1;
 
         this.leftOffSet = horizontalOffsetMove.get(this.sActionName) * (int)(percentDone * Tile_Factory_Base.getTileWidth());
