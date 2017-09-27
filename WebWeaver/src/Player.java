@@ -75,12 +75,12 @@ public class Player implements TileObject {
 		int widthOffset = direction.getY();
 		int height = Constants.FieldParams.fieldViewHeight;
 		int width = Constants.FieldParams.fieldViewWidth;
-		int initX = xS - height / 2 + (heighOffset==-1? -1 : 0);
-		int initY = yS - width / 2 + (widthOffset==-1? -1 : 0);
+		int initX = xS - height / 2 + (heighOffset == -1 ? -1 : 0);
+		int initY = yS - width / 2 + (widthOffset == -1 ? -1 : 0);
 		StringBuilder retTiles = new StringBuilder();
 		JsonArray retObjects = new JsonArray();
-		for (int i = initX; i < initX + height + (heighOffset==1? 1 : 0); i++)
-			for (int j = initY; j < initY + width + (widthOffset==1? 1 : 0); j++) {
+		for (int i = initX; i < initX + height + (Math.abs(heighOffset) == 1 ? 1 : 0); i++)
+			for (int j = initY; j < initY + width + (Math.abs(widthOffset) == 1 ? 1 : 0); j++) {
 				Tile tile = field.getTile(i, j);
 				retTiles.append(Long.toString(tile.getType())).append(",");
 				TileObject fObject = tile.getFObject();
