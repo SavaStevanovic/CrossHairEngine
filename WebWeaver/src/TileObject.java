@@ -20,19 +20,15 @@ public interface TileObject {
 		int yS = getY();
 		Move move=getMove();
 		Direction direction = move.getDirection();
-		if (move.isExecuted()) {
-			xS -= direction.getX();
-			yS -= direction.getY();
-		}
 		Field field=getField();
 		int heighOffset = direction.getX();
 		int widthOffset = direction.getY();
 		int height = Constants.FieldParams.fieldViewHeight;
 		int width = Constants.FieldParams.fieldViewWidth;
-		int initX = xS - height / 2 + heighOffset;
-		int initY = yS - width / 2 + widthOffset;
-		for (int i = initX; i < initX + height  + Math.abs(heighOffset); i++)
-			for (int j = initY; j < initY + width  + Math.abs(widthOffset); j++) {
+		int initX = xS - height / 2 + (heighOffset==-1? -1 : 0);
+		int initY = yS - width / 2 + (widthOffset==-1? -1 : 0);
+		for (int i = initX; i < initX + height + (heighOffset==1? 1 : 0); i++)
+			for (int j = initY; j < initY + width + (widthOffset==1? 1 : 0); j++) {
 				Tile tile = field.getTile(i, j);
 				TileObject fObject = tile.getFObject();
 				if (fObject != null)

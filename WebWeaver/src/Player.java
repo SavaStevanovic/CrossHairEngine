@@ -52,10 +52,6 @@ public class Player implements TileObject {
 		json.addProperty("executed", move.isExecuted());
 		json.addProperty("moveTime", Constants.FieldParams.baseTurnLength);
 		json.addProperty("type", "player");
-		if (move.isExecuted()) {
-			xS -= direction.getX();
-			yS -= direction.getY();
-		}
 		json.addProperty("x", xS);
 		json.addProperty("y", yS);
 		return json;
@@ -75,20 +71,16 @@ public class Player implements TileObject {
 		int xS = x;
 		int yS = y;
 		Direction direction = move.getDirection();
-		if (move.isExecuted()) {
-			xS -= direction.getX();
-			yS -= direction.getY();
-		}
 		int heighOffset = direction.getX();
 		int widthOffset = direction.getY();
 		int height = Constants.FieldParams.fieldViewHeight;
 		int width = Constants.FieldParams.fieldViewWidth;
-		int initX = xS - height / 2 + heighOffset;
-		int initY = yS - width / 2 + widthOffset;
+		int initX = xS - height / 2 + (heighOffset==-1? -1 : 0);
+		int initY = yS - width / 2 + (widthOffset==-1? -1 : 0);
 		StringBuilder retTiles = new StringBuilder();
 		JsonArray retObjects = new JsonArray();
-		for (int i = initX; i < initX + height + Math.abs(heighOffset); i++)
-			for (int j = initY; j < initY + width + Math.abs(widthOffset); j++) {
+		for (int i = initX; i < initX + height + (heighOffset==1? 1 : 0); i++)
+			for (int j = initY; j < initY + width + (widthOffset==1? 1 : 0); j++) {
 				Tile tile = field.getTile(i, j);
 				retTiles.append(Long.toString(tile.getType())).append(",");
 				TileObject fObject = tile.getFObject();
@@ -105,31 +97,6 @@ public class Player implements TileObject {
 		if (messageHandler != null) {
 			messageHandler.sendMessage(playerJson.toString());
 		}
-	}
-
-	public void sync() {
-		int xS = x;
-		int yS = y;
-		Direction direction = move.getDirection();
-		if (move.isExecuted()) {
-			xS -= direction.getX();
-			yS -= direction.getY();
-		}
-		int heighOffset = direction.getX();
-		int widthOffset = direction.getY();
-		int height = Constants.FieldParams.fieldViewHeight;
-		int width = Constants.FieldParams.fieldViewWidth;
-		int initX = xS - height / 2 + heighOffset;
-		int initY = yS - width / 2 + widthOffset;
-		for (int i = initX; i < initX + height  + Math.abs(heighOffset); i++)
-			for (int j = initY; j < initY + width  + Math.abs(widthOffset); j++) {
-				Tile tile = field.getTile(i, j);
-				TileObject fObject = tile.getFObject();
-				if (fObject != null)
-				{
-					fObject.Info();
-				}
-			}
 	}
 
 	public void Move(Direction direction) {
