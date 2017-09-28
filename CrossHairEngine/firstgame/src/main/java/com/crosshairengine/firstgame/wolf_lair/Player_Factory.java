@@ -9,6 +9,7 @@ import com.crosshairengine.firstgame.wolf_lair.Players.Player;
 import com.crosshairengine.firstgame.wolf_lair.Players.Player_enemy;
 import com.crosshairengine.firstgame.wolf_lair.Players.Player_friendly;
 import com.crosshairengine.firstgame.wolf_lair.Settings.PhoneSettings;
+import com.crosshairengine.firstgame.wolf_lair.TileFactories.Tile_Factory_Base;
 
 import java.util.HashMap;
 
@@ -71,8 +72,8 @@ public class Player_Factory {
     public Player getPlayer(int player_type, int x, int y) {
         Player_type key = Player_Factory.Player_type.values()[player_type];
         Bitmap bmp = bitmap_originals.get(key.getValue());
-        int posX = x * height / height_count;
-        int posY = y * weight / weight_count;
+        int posX = x * Tile_Factory_Base.getTileWidth();
+        int posY = y * Tile_Factory_Base.getTileHeight();
         Player player = null;
         switch (key) {
             case FRIEND:

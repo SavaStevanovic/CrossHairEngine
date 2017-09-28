@@ -49,8 +49,8 @@ public class WebWeaverProcessor implements WebProcess {
         m_gameEngine.clearPlayers();
         m_gameEngine.m_MainDrawClass.clearCDrawableObjectStorage();
         JsonObject jsonPlayer = result.getAsJsonObject("Player");
-        int x = jsonPlayer.get("x").getAsInt() - 7;
-        int y = jsonPlayer.get("y").getAsInt() - 4;
+        int x = jsonPlayer.get("x").getAsInt() - Constants.width/2;
+        int y = jsonPlayer.get("y").getAsInt() - Constants.height/2;
         JsonArray playerArray = result.get("AllPlayers").getAsJsonArray();
         for (JsonElement playerJson : playerArray) {
             JsonObject jsonEnemyPlayer = playerJson.getAsJsonObject();
