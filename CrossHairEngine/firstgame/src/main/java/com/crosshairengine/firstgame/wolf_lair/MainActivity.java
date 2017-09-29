@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         //
         Player_Factory.getInstance(this,Constants.height, Constants.width);
         Tile_Factory_Abstract_Factory.Initialize(this,Constants.height, Constants.width);
+        Bullet_Factory.getInstance(this,Constants.height, Constants.width);
 
         new FlyClientReceiver(Constants.onlySocket, new WebWeaverProcessor(main), semProcessServerMessage).start();
         main.start();
