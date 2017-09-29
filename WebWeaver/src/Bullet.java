@@ -73,8 +73,8 @@ public class Bullet implements TileObject, Runnable {
 	public void run() {
 		travelDistance--;
 		if (travelDistance <= 0) {
-			destroy();
 			field.removeTileObject(this.getX(), this.getY());
+			destroy();
 		}
 		if (!active) {
 			return;
@@ -87,6 +87,7 @@ public class Bullet implements TileObject, Runnable {
 	@Override
 	public void destroy() {
 		active = false;
+		sync();
 	}
 
 	@Override

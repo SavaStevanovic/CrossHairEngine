@@ -63,10 +63,9 @@ public class Player implements TileObject {
 
 	@Override
 	public void Info() {
-		if (new Date().getTime() - this.move.getMoveStart() > Constants.FieldParams.baseTurnLength) {
-			if (!this.move.isExecuted()) {
-				field.moveFObject(this);
-			}
+		if (new Date().getTime() - this.move.getMoveStart() > Constants.FieldParams.baseTurnLength
+				&& !this.move.isExecuted()) {
+			field.moveFObject(this);
 		}
 		int xS = x;
 		int yS = y;
@@ -129,6 +128,7 @@ public class Player implements TileObject {
 	}
 
 	public void fire() {
+		sync();
 		Direction bulletDirection = this.getMove().getDirection();
 		ExecutorManager.getInstance().schedule(
 				new Bullet(this.getAddress(), field, x + bulletDirection.getX(), y + bulletDirection.getY(), move, 5),
