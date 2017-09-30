@@ -22,7 +22,8 @@ public class Map extends AbstractMap {
                int timeSinceBeginingOfTheAction,
                int timeLengthOfAction,
                int width,
-               int height)
+               int height,
+               boolean factionState)
     {
         super(sDirection, width, height);
 
@@ -31,7 +32,7 @@ public class Map extends AbstractMap {
             //
             this.setTile(Tile_Factory_Abstract_Factory.GetFactory(sDirection).getTile(Integer.parseInt(stringArray[i]), i), i);
         }
-        m_state = new MapStateObject(sDirection, timeSinceBeginingOfTheAction, timeLengthOfAction);
+        m_state = new MapStateObject(sDirection, timeSinceBeginingOfTheAction, timeLengthOfAction, factionState);
     }
 
     @Override

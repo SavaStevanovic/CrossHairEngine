@@ -7,10 +7,10 @@ import java.util.Date;
  * Created by NikolaRancic on 9/24/2017.
  */
 
-public class StateObject {
+public abstract class StateObject {
     protected Bitmap m_bitmap;
 
-    protected String sActionName;
+    protected String sDirectionName;
     protected int timeActionProgressBeforeObjectCreation;
     protected int timeLengthOfAction;
     protected long timeCreationOfObject;
@@ -21,21 +21,21 @@ public class StateObject {
     /**
      *  base constructor for StateObject
      * @param bitmap
-     * @param sActionName
+     * @param sDirectionName
      * @param timeActionProgressBeforeObjectCreation
      * @param timeLengthOfAction
      * @param leftOffSet
      * @param topOffSet
      */
     public StateObject(Bitmap bitmap,
-                       String sActionName,
+                       String sDirectionName,
                        int timeActionProgressBeforeObjectCreation,
                        int timeLengthOfAction,
                        int leftOffSet,
                        int topOffSet) {
         this.m_bitmap = bitmap;
 
-        this.sActionName = sActionName;
+        this.sDirectionName = sDirectionName;
         this.timeActionProgressBeforeObjectCreation = timeActionProgressBeforeObjectCreation;
         this.timeLengthOfAction = timeLengthOfAction;
         this.timeCreationOfObject = new Date().getTime();
@@ -46,16 +46,16 @@ public class StateObject {
 
     public StateObject() {
         this(null /*bitmap*/,
-                null/*sActionName*/,
+                null/*sDirectionName*/,
                 0 /*timeActionProgressBeforeObjectCreation*/,
                 0 /*timeLengthOfAction*/,
                 0 /*leftOffSet*/,
                 0 /*topOffSet*/);
     }
 
-    public StateObject(Bitmap bitmap, String sActionName, int timeActionProgressBeforeObjectCreation, int timeLengthOfAction) {
+    public StateObject(Bitmap bitmap, String sDirectionName, int timeActionProgressBeforeObjectCreation, int timeLengthOfAction) {
         this(bitmap,
-                sActionName,
+                sDirectionName,
                 timeActionProgressBeforeObjectCreation,
                 timeLengthOfAction,
                 0 /*leftOffSet*/,
