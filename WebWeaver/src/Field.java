@@ -33,8 +33,8 @@ public class Field {
 	public boolean containsPlayer(InetAddress inetAddress) {
 		return tileObjects.containsKey(inetAddress);
 	}
-	
-	public void removeTileObject(int x,int y){
+
+	public void removeTileObject(int x, int y) {
 		field[x][y].setFObject(null);
 	}
 
@@ -54,16 +54,16 @@ public class Field {
 		return tileObjects.keySet();
 	}
 
-	public void addPlayer(Player player) {
-		tileObjects.put(player.getAddress(), player);
-		field[player.getX()][player.getY()].setFObject(player);
+	public void addFObject(TileObject tileObject) {
+		tileObjects.put(tileObject.getID(), tileObject);
+		field[tileObject.getX()][tileObject.getY()].setFObject(tileObject);
 	}
 
 	public void moveFObject(TileObject fObject) {
 		field[fObject.getX()][fObject.getY()].free();
 		fObject.mObject();
-		TileObject obsticle=field[fObject.getX()][fObject.getY()].getFObject();
-		if(obsticle!=null){
+		TileObject obsticle = field[fObject.getX()][fObject.getY()].getFObject();
+		if (obsticle != null) {
 			fObject.destroy();
 			obsticle.destroy();
 			return;

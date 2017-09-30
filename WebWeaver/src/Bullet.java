@@ -11,7 +11,7 @@ public class Bullet implements TileObject, Runnable {
 	private String playerAdress;
 	private Field field;
 	private int x, y;
-	
+
 	private int travelDistance;
 	private Move move;
 	private boolean active;
@@ -22,13 +22,15 @@ public class Bullet implements TileObject, Runnable {
 		this.field = field;
 		this.bulletID = UUID.randomUUID().toString();
 		this.playerAdress = playerAdress;
-		this.x = x;
-		this.y = y;
+		this.x = x + move.getDirection().getX();
+		this.y = y + move.getDirection().getY();
 		this.travelDistance = travelDistance;
 		if (move.getDirection() == Direction.CENTER) {
 			move = new Move(Direction.RIGHT);
 		}
 		this.move = move;
+		field.addFObject(this);
+		sync();
 	}
 
 	@Override
@@ -82,6 +84,7 @@ public class Bullet implements TileObject, Runnable {
 		ExecutorManager.getInstance().schedule(this, Constants.FieldParams.baseTurnLength, TimeUnit.MILLISECONDS);
 		field.moveFObject(this);
 		sync();
+
 	}
 
 	@Override

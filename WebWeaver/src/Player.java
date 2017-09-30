@@ -18,7 +18,7 @@ public class Player implements TileObject {
 		this.field = field;
 		this.move = new Move(Direction.CENTER);
 		this.messageHandler = messageHandler;
-		field.addPlayer(this);
+		field.addFObject(this);
 	}
 
 	public void connect(MessageHandler messageHandeler) {
@@ -104,13 +104,20 @@ public class Player implements TileObject {
 			if (!this.move.isExecuted()) {
 				field.moveFObject(this);
 			}
-			field.reserveTile(this, direction);
-			this.move = new Move(direction);
+			if (x + direction.getX() > Constants.FieldParams.fieldViewHeight / 2
+					&& x + direction.getX() < Constants.FieldParams.fieldHeight
+							- Constants.FieldParams.fieldViewHeight / 2
+					&& y + direction.getY() > Constants.FieldParams.fieldViewWidth / 2
+					&& y + direction.getY() < Constants.FieldParams.fieldWidth
+							- Constants.FieldParams.fieldViewWidth / 2) {
+				field.reserveTile(this, direction);
+				this.move = new Move(direction);
+			}
 		}
 		sync();
 	}
 
-	public String getAddress() {
+	public String getID() {
 		if (messageHandler == null) {
 			return null;
 		}
@@ -130,19 +137,13 @@ public class Player implements TileObject {
 	public void fire() {
 		sync();
 		Direction bulletDirection = this.getMove().getDirection();
-		ExecutorManager.getInstance().schedule(
-				new Bullet(this.getAddress(), field, x + bulletDirection.getX(), y + bulletDirection.getY(), new Move(bulletDirection), 5),
-				0, TimeUnit.MILLISECONDS);
+		Bullet bullet=new Bullet(this.getID(), field, x , y , new Move(bulletDirection), 5);
+		ExecutorManager.getInstance().schedule(bullet, Constants.FieldParams.baseTurnLength, TimeUnit.MILLISECONDS);
 	}
 
 	@Override
 	public void destroy() {
-		field.removePlayer(this.getAddress());
-	}
-
-	@Override
-	public String getID() {
-		return messageHandler.socket.getInetAddress().toString();
+		field.removePlayer(this.getID());
 	}
 
 	@Override

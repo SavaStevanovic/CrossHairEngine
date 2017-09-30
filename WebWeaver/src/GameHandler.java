@@ -30,8 +30,13 @@ public class GameHandler {
 	public Player getPlayer(MessageHandler messageHandler) {
 		InetAddress playerAddress = messageHandler.socket.getInetAddress();
 		if (!field.containsPlayer(playerAddress)) {
-			field.addPlayer(new Player(messageHandler,field, randomGenerator.nextInt(Constants.FieldParams.fieldHeight),
-					randomGenerator.nextInt(Constants.FieldParams.fieldWidth)));
+			int pHeight = randomGenerator
+					.nextInt(Constants.FieldParams.fieldHeight - Constants.FieldParams.fieldViewHeight)
+					+ Constants.FieldParams.fieldViewHeight / 2;
+			int pWidth = randomGenerator
+					.nextInt(Constants.FieldParams.fieldWidth - Constants.FieldParams.fieldViewWidth)
+					+ Constants.FieldParams.fieldViewWidth / 2;
+			field.addFObject(new Player(messageHandler, field, pHeight, pWidth));
 		}
 		Player player = (Player) field.getTileObject(playerAddress.toString());
 		player.connect(messageHandler);
