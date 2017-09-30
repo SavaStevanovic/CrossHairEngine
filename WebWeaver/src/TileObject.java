@@ -21,10 +21,10 @@ public interface TileObject {
 		Move move = getMove();
 		Direction direction = move.getDirection();
 		Field field = getField();
-		int heighOffset = direction.getX();
-		int widthOffset = direction.getY();
-		int height = Constants.FieldParams.fieldViewHeight;
-		int width = Constants.FieldParams.fieldViewWidth;
+		int heighOffset = direction.getX()-1;
+		int widthOffset = direction.getY()-1;
+		int height = Constants.FieldParams.fieldViewHeight+2;
+		int width = Constants.FieldParams.fieldViewWidth+2;
 		int initX = xS - height / 2 + (heighOffset == -1 ? -1 : 0);
 		int initY = yS - width / 2 + (widthOffset == -1 ? -1 : 0);
 		for (int i = initX; i < initX + height + (Math.abs(heighOffset) == 1 ? 1 : 0); i++)
