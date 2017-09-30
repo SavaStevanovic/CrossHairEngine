@@ -22,12 +22,12 @@ public class Bullet implements TileObject, Runnable {
 		this.field = field;
 		this.bulletID = UUID.randomUUID().toString();
 		this.playerAdress = playerAdress;
-		this.x = x + move.getDirection().getX();
-		this.y = y + move.getDirection().getY();
-		this.travelDistance = travelDistance;
 		if (move.getDirection() == Direction.CENTER) {
 			move = new Move(Direction.RIGHT);
 		}
+		this.x = x + move.getDirection().getX();
+		this.y = y + move.getDirection().getY();
+		this.travelDistance = travelDistance;
 		this.move = move;
 		field.addFObject(this);
 		sync();
