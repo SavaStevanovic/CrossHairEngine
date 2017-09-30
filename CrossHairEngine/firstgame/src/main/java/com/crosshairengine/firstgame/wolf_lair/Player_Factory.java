@@ -69,7 +69,7 @@ public class Player_Factory {
 
     }
 
-    public Player getPlayer(int player_type, int x, int y) {
+    public Player getPlayer(int player_type, int x, int y, String sDirectionName, int timeActionProgressBeforeObjectCreation, int timeLengthOfAction) {
         Player_type key = Player_Factory.Player_type.values()[player_type];
         Bitmap bmp = bitmap_originals.get(key.getValue());
         int posX = x * Tile_Factory_Base.getTileWidth();
@@ -80,7 +80,7 @@ public class Player_Factory {
                 player = new Player_friendly(bmp, posX, posY);
                 break;
             case ENEMY:
-                player = new Player_enemy(bmp, posX, posY);
+                player = new Player_enemy(bmp, posX, posY, sDirectionName, timeActionProgressBeforeObjectCreation, timeLengthOfAction);
                 break;
         }
         return player;

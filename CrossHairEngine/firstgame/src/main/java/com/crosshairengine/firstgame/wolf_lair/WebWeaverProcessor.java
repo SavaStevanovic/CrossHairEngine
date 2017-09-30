@@ -32,7 +32,7 @@ public class WebWeaverProcessor implements WebProcess {
     @Override
     public void process(String webResponse) {
         Player_Factory player_factory = Player_Factory.getInstance();
-        Bullet_Factory bullet_facotry = Bullet_Factory.getInstance();
+        Bullet_Factory bullet_factory = Bullet_Factory.getInstance();
         JsonObject result = jsonParser.parse(webResponse).getAsJsonObject();
 
         //Initialize map
@@ -59,22 +59,48 @@ public class WebWeaverProcessor implements WebProcess {
         int y = jsonPlayer.get("y").getAsInt() - Constants.width/2;
 
         JsonArray allObjectsArray = result.get("AllPlayers").getAsJsonArray();
+
+
         // set bullets
         //
         ArrayList<CDrawable> bulletsObjectsArray = new ArrayList<CDrawable>();
         for (JsonElement objectElement : allObjectsArray) {
             JsonObject objectElemJson = objectElement.getAsJsonObject();
             if (objectElemJson.get("type").getAsString().equals("bullet")){
-                bulletsObjectsArray.add(bullet_facotry.getBullet(0, objectElemJson.get("y").getAsInt() - y, objectElemJson.get("x").getAsInt() - x));
+                bulletsObjectsArray.add(bullet_factory.getBullet(0,
+                        objectElemJson.get("y").getAsInt() - y,
+                        objectElemJson.get("x").getAsInt() - x,
+                        objectElemJson.get("direction").getAsString(),
+                        objectElemJson.get("startTime").getAsInt(),
+                        objectElemJson.get("moveTime").getAsInt()));
             }
         }
 
-        // set all players
+
+        // all players
         //
         for (JsonElement objectElement : allObjectsArray) {
             JsonObject objectElemJson = objectElement.getAsJsonObject();
             if (objectElemJson.get("type").getAsString().equals("player")){
-                m_gameEngine.addPlayer(player_factory.getPlayer(1, objectElemJson.get("y").getAsInt() - y, objectElemJson.get("x").getAsInt() - x));
+                if ( objectElemJson.get("y").getAsInt() == y + Constants.width/2 && objectElemJson.get("x").getAsInt() == x + Constants.height/2)
+                {
+                    m_gameEngine.addPlayer(player_factory.getPlayer(0,
+                            objectElemJson.get("y").getAsInt() - y,
+                            objectElemJson.get("x").getAsInt() - x,
+                            objectElemJson.get("direction").getAsString(),
+                            objectElemJson.get("startTime").getAsInt(),
+                            objectElemJson.get("moveTime").getAsInt()));
+                }
+                else
+                {
+                    m_gameEngine.addPlayer(player_factory.getPlayer(1,
+                            objectElemJson.get("y").getAsInt() - y,
+                            objectElemJson.get("x").getAsInt() - x,
+                            objectElemJson.get("direction").getAsString(),
+                            objectElemJson.get("startTime").getAsInt(),
+                            objectElemJson.get("moveTime").getAsInt()));
+                }
+
             }
         }
 

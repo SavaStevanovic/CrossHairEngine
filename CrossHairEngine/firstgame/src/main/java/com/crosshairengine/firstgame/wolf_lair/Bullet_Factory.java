@@ -65,7 +65,7 @@ public class Bullet_Factory {
 
     }
 
-    public Bullet getBullet(int bullet_type, int x, int y) {
+    public Bullet getBullet(int bullet_type, int x, int y, String sDirectionName, int timeActionProgressBeforeObjectCreation, int timeLengthOfAction) {
         Bullet_type key = Bullet_Factory.Bullet_type.values()[bullet_type];
         Bitmap bmp = bitmap_originals.get(key.getValue());
         int posX = x * Tile_Factory_Base.getTileWidth();
@@ -73,7 +73,7 @@ public class Bullet_Factory {
         Bullet bullet = null;
         switch (key) {
             case BASIC:
-                bullet = new Bullet(bmp, posX, posY);
+                bullet = new Bullet(bmp, posX, posY, sDirectionName, timeActionProgressBeforeObjectCreation, timeLengthOfAction);
                 break;
         }
         return bullet;
