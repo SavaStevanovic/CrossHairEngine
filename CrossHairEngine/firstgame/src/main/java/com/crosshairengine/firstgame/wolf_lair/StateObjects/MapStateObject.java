@@ -34,16 +34,16 @@ public class MapStateObject extends StateObject {
 
     private boolean factionState;
 
-    public MapStateObject(String sActionName, int timeActionProgressBeforeObjectCreation, int timeLengthOfAction, boolean factionState) {
-        super(null, sActionName, timeActionProgressBeforeObjectCreation, timeLengthOfAction);
+    public MapStateObject(String sDirectionName, int timeActionProgressBeforeObjectCreation, int timeLengthOfAction, boolean factionState) {
+        super(null, sDirectionName, timeActionProgressBeforeObjectCreation, timeLengthOfAction);
 
         double percentDone = TimeALL() / (double) this.timeLengthOfAction;
 
-        this.leftOffSet = horizontalOffsetMove.get(this.sActionName) * (int)(percentDone * Tile_Factory_Base.getTileWidth());
-        if (sActionName.equals("left")) this.leftOffSet -= Tile_Factory_Base.getTileWidth();
+        this.leftOffSet = horizontalOffsetMove.get(this.sDirectionName) * (int)(percentDone * Tile_Factory_Base.getTileWidth());
+        if (sDirectionName.equals("left")) this.leftOffSet -= Tile_Factory_Base.getTileWidth();
 
-        this.topOffSet = verticalOffsetMove.get(this.sActionName) * (int)(percentDone * Tile_Factory_Base.getTileHeight());
-        if (sActionName.equals("up")) this.topOffSet -= Tile_Factory_Base.getTileHeight();
+        this.topOffSet = verticalOffsetMove.get(this.sDirectionName) * (int)(percentDone * Tile_Factory_Base.getTileHeight());
+        if (sDirectionName.equals("up")) this.topOffSet -= Tile_Factory_Base.getTileHeight();
 
         this.factionState =  factionState;
     }
@@ -59,18 +59,18 @@ public class MapStateObject extends StateObject {
 
         // offset for moving map fields when moving
         //
-        this.leftOffSet = horizontalOffsetMove.get(this.sActionName) * (int) (percentDone * Tile_Factory_Base.getTileWidth());
-        if (sActionName.equals("left")) this.leftOffSet -= Tile_Factory_Base.getTileWidth();
+        this.leftOffSet = horizontalOffsetMove.get(this.sDirectionName) * (int) (percentDone * Tile_Factory_Base.getTileWidth());
+        if (sDirectionName.equals("left")) this.leftOffSet -= Tile_Factory_Base.getTileWidth();
 
-        this.topOffSet = verticalOffsetMove.get(this.sActionName) * (int) (percentDone * Tile_Factory_Base.getTileHeight());
-        if (sActionName.equals("up")) this.topOffSet -= Tile_Factory_Base.getTileHeight();
+        this.topOffSet = verticalOffsetMove.get(this.sDirectionName) * (int) (percentDone * Tile_Factory_Base.getTileHeight());
+        if (sDirectionName.equals("up")) this.topOffSet -= Tile_Factory_Base.getTileHeight();
 
         // offset for handling bullet firing
         // factionState = true than it is bullet scenario
         //
-        if (sActionName.equals("left") && factionState) this.leftOffSet -= Tile_Factory_Base.getTileWidth();
-        if (sActionName.equals("right") && factionState) this.leftOffSet += Tile_Factory_Base.getTileWidth();
-        if (sActionName.equals("up") && factionState) this.topOffSet -= Tile_Factory_Base.getTileHeight();
-        if (sActionName.equals("down") && factionState) this.topOffSet += Tile_Factory_Base.getTileHeight();
+        if (sDirectionName.equals("left") && factionState) this.leftOffSet -= Tile_Factory_Base.getTileWidth();
+        if (sDirectionName.equals("right") && factionState) this.leftOffSet += Tile_Factory_Base.getTileWidth();
+        if (sDirectionName.equals("up") && factionState) this.topOffSet -= Tile_Factory_Base.getTileHeight();
+        if (sDirectionName.equals("down") && factionState) this.topOffSet += Tile_Factory_Base.getTileHeight();
     }
 }
