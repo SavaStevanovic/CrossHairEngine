@@ -131,7 +131,7 @@ public class Player implements TileObject {
 		sync();
 		Direction bulletDirection = this.getMove().getDirection();
 		ExecutorManager.getInstance().schedule(
-				new Bullet(this.getAddress(), field, x + bulletDirection.getX(), y + bulletDirection.getY(), move, 5),
+				new Bullet(this.getAddress(), field, x + bulletDirection.getX(), y + bulletDirection.getY(), new Move(bulletDirection), 5),
 				0, TimeUnit.MILLISECONDS);
 	}
 
