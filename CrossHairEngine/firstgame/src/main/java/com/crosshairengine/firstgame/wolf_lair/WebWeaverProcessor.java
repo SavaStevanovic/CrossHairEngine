@@ -40,12 +40,14 @@ public class WebWeaverProcessor implements WebProcess {
         int iStartTime = result.getAsJsonObject("Player").get("startTime").getAsInt();
         int iActionTime = result.getAsJsonObject("Player").get("moveTime").getAsInt();
         String[] sTilesArray = result.get("Tiles").getAsString().split(",");
+        boolean sactionState = result.getAsJsonObject("Player").get("executed").getAsBoolean();
         Map newMap = new Map(sDirection,
                 sTilesArray,
                 iStartTime,
                 iActionTime,
                 Constants.width,
-                Constants.height);
+                Constants.height,
+                sactionState);
 
         m_gameEngine.clearPlayers();
         m_gameEngine.m_MainDrawClass.clearCDrawableObjectStorage();
